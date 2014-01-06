@@ -1,4 +1,4 @@
-"NINJA-PingU Is Not Just a Ping Utility" is a free open-source high performance network scanner and services discoverage tool for large scale  analyses.
+"NINJA-PingU Is Not Just a Ping Utility" is a free open-source high performance network scanner framework and services discoverage tool for large scale  analyses aimed at allowing fast and easy plugin development for security researchers.
 
 
 Requeriments
@@ -32,13 +32,13 @@ Usage
 Examples
 ========
 
-   # ./bin/npingu -t 9 -p 20-80 -r 188.165.83.148-188.255.83.148 -d 1 -m Service
+   # ./bin/npingu -t 3 -p 20-80 -r 188.165.83.148-188.255.83.148 -d 1 -m Service
 
       -Targeted Hosts [188.165.83.148-188.255.83.148]
       -Targeted Port Range [20-80]
-      -Threads [9]
+      -Threads [3]
       -Delay 1 usec
-      -User the Service discoverage Module
+      -Use the Service discoverage Module
 
 
    #  ./bin/npingu -t 5 -p 80 -s 74.125.0.0-74.125.255.255 #scan google
