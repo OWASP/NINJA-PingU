@@ -1,13 +1,13 @@
 NINJA PingU
 ===========
-"NINJA-PingU Is Not Just a Ping Utility" is a free open-source high performance network scanner framework and services discoverage tool for large scale  analyses aimed at allowing fast and easy plugin development for security researchers.
+"NINJA-PingU Is Not Just a Ping Utility" is a free open-source high performance network scanner framework and services discoverage tool for large scale analyses aimed at allowing fast and easy plugin development for security researchers.
 
 
-Requeriments
+Requirements
 ============
 
  - Compiler
- - Linux box. Will not work niether on *BSD or Windows OS.
+ - Linux box. Will not work neither on *BSD or Windows OS.
  - Hands and a Brain
 
 
