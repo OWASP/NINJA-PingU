@@ -1,3 +1,5 @@
+NINJA PingU
+===========
 "NINJA-PingU Is Not Just a Ping Utility" is a free open-source high performance network scanner framework and services discoverage tool for large scale  analyses aimed at allowing fast and easy plugin development for security researchers.
 
 
