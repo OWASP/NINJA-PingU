@@ -358,7 +358,7 @@ Full-Width Styles
   height:70px;
   text-indent: -5000px;
   overflow: hidden;
-  background: url(../images/sprite_link.png) no-repeat bottom left;
+  background: url(../images/sprite_links.png) no-repeat bottom left;
 }
 
 .faq_link {
@@ -368,16 +368,16 @@ Full-Width Styles
   height:70px;
   text-indent: -5000px;
   overflow: hidden;
-  background: url(../images/sprite_link.png) no-repeat bottom right;
+  background: url(../images/sprite_links.png) no-repeat bottom right;
   margin-left: 10px;
 }
 
 .dev_link:hover {
-  background: url(../images/sprite_link.png) no-repeat top left;
+  background: url(../images/sprite_links.png) no-repeat top left;
 }
 
 .faq_link:hover {
-  background: url(../images/sprite_link.png) no-repeat top right;
+  background: url(../images/sprite_links.png) no-repeat top right;
 }
 
 #main_content_wrap {
