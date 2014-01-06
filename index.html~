@@ -23,8 +23,8 @@
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/owasp/NINJA_PingU/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/owasp/NINJA_PingU//tarball/master">Download this project as a tar.gz file</a>            <a class="dev_link" href="./dev.html">DEV</a>
-              <a class="faq_link" href="./faq.html">FAQ</a>
+              <a class="tar_download_link" href="https://github.com/owasp/NINJA_PingU//tarball/master">Download this project as a tar.gz file</a>            <a class="dev_link" href="https://github.com/owasp/NINJA_PingU/zipball/master">Download this project as a .zip file</a>
+              <a class="faq_link" href="https://github.com/owasp/NINJA_PingU//tarball/master">Download this project as a tar.gz file</a>
             </section>
         </header>
     </div>
