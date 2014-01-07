@@ -34,7 +34,17 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h3>
-<a name="frequently-asked-questions" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Installing</h3>
+<a name="frequently-asked-questions" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Requirements</h3>
+<p>NINJA PingU comes with all the necessesary dependencies out of the box. The following platform is requiered, though.</p>
+
+<pre><code>-Linux box.
+-Super cow powers.
+-Brain.
+</pre></code>
+<p><i>note: root is required to create raw socket descriptors.</i> </p>
+<br>
+
+<h3><a name="frequently-asked-questions" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Installing</h3>
 
 <p>NINJA-PingU currently, only works under Linux. To compile it, run:</p>
 
@@ -46,9 +56,20 @@
 
 
 <h3><a name="frequently-asked-questions" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Basic Usage</h3>
-
-<p>This section contains some useful data for using ninja pingu</p>
+<p> The following is the NINJA PingU basic usage.
+<pre>
+# sudo ./bin/npingu [OPTIONS] targets<code>
+  -t Number of sender threads.
+  -p Port scan range. For instance, 80 or 20-80.
+  -d Delay between packages sent (in usecs).
+  -s No service discoverage (less bandwith load, more hosts/time).
+  -m Module to run. For instance, Service.
+  [targets] Can be a single ip or a range (i.e. 0.0.0.0-255.0.0.0).
+  -h Show this help.
+</code></pre>
 <br>
+<p> Below it is shown some examples.</p>
+
 <pre>
 # ./bin/npingu -t 3 -p 20-80 -r 188.165.83.148-188.255.83.148 -d 1 -m Service<code>
   -Targeted Hosts [188.165.83.148-188.255.83.148]
