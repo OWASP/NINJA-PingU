@@ -33,12 +33,36 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a name="dev" class="anchor" href="#dev"><span class="octicon octicon-link"></span></a>Plugin Development.</h3>
+<br>
+        <h3><a name="dev" class="anchor" href="#dev"><span class="octicon octicon-link"></span></a>Plugin Development</h3>
 
-<p>This page contains some documentation about plugin development</p>
+<p>Bulding NINJA PingU plugins is very easy. The three following C functions have to be implemented to accomplish this.</p>
+
+<h4> · Plugin Initialization</h4>
+To carry out plugin initialization actions, the following function has to be declared:
+<pre><code>void initPlugin();</code></pre>
 <br>
+<h4> · Scanner Input Provide</h4>
+The messages that the scanner will send after a successful connection are provided by the following function.
+<pre><code>void getServiceInput(int port, char *msg);</code></pre>
 <br>
+<h4> · Scanner Output Analysis</h4>
+The responses of the target will be given to the following function.
+<pre><code>void provideOutput(char *host, int port, char *msg);</code></pre>
+
+<br>
+<h3><span class="octicon octicon-link"></span>Plugin Integration</h3>
+<p>Integrating a NINJA PingU is very easy, you can add to the Makefile the following file for automatic compilation.</p>
+<pre><code>gcc -c src/plugin/PLUGINNAME/scanner.c -o src/plugin/PLUGINNAME/scanner.o -pedantic -g -Wall -std=c99 -fpic -I.
+gcc -o src/plugin/PLUGINNAME/scanner.so src/plugin/PLUGINNAME/scanner.o -shared
+</code></pre>
+<br>
+<p>Using your plugin in NINJA PingU can be achieved by using the -m flag with your plugin name. For instance.</p>
+ <pre><code>$ ./bin/npingu -m PLUGINNAME 1.1.1.1</code></pre>
+<br>
+
+<h3><span class="octicon octicon-link"></span>More Documentation</h3>
+<p>More information about plugin development and code samples can be found in the <a href="https://github.com/owasp/NINJA-PingU">NINJA PingU codebase</a>.
       </section>
     </div>
     <!-- FOOTER  -->
