@@ -33,7 +33,10 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-<br>
+      <br>
+      <h3><span class="octicon octicon-link"></span>Embedded Devices & Services Discoverage Plugin</h3>
+      <p>NINJA PingU comes out of the box with a plugin for services analysis and embedded devices discoverage. This plugin is able to find open cameras, printers, routers, gps devices, VoIp phones, eletrical control devices and several others.</p>
+      <br>
         <h3><a name="dev" class="anchor" href="#dev"><span class="octicon octicon-link"></span></a>Plugin Development</h3>
 
 <p>Bulding NINJA PingU plugins is very easy. The three following C functions have to be implemented to accomplish this.</p>
@@ -60,7 +63,6 @@ gcc -o src/plugin/PLUGINNAME/scanner.so src/plugin/PLUGINNAME/scanner.o -shared
 <p>Using your plugin in NINJA PingU can be achieved by using the -m flag with your plugin name. For instance.</p>
  <pre><code>$ ./bin/npingu -m PLUGINNAME 1.1.1.1</code></pre>
 <br>
-
 <h3><span class="octicon octicon-link"></span>More Documentation</h3>
 <p>More information about plugin development and code samples can be found in the <a href="https://github.com/owasp/NINJA-PingU">NINJA PingU codebase</a>.
       </section>
