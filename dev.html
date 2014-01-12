@@ -41,9 +41,13 @@
 
 <p>Bulding NINJA PingU plugins is very easy. The three following C functions have to be implemented to accomplish this.</p>
 
-<h4> · Plugin Initialization</h4>
+<h4> · Plugin Initializer</h4>
 To carry out plugin initialization actions, the following function has to be declared:
-<pre><code>void initPlugin();</code></pre>
+<pre><code>void onInitPlugin();</code></pre>
+<br>
+<h4> · Plugin Finalizer</h4>
+To carry out plugin end actions, the following function has to be declared:
+<pre><code>void onStopPlugin();</code></pre>
 <br>
 <h4> · Scanner Input Provide</h4>
 The messages that the scanner will send after a successful connection are provided by the following function.
