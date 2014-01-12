@@ -35,18 +35,20 @@
       <section id="main_content" class="inner">
        <br> <h3><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>What's NINJA PingU?</h3>
 
-       <p>"NINJA-PingU Is Not Just a Ping Utility" is a free open-source high performance network scanner tool for large scale  analyses. It has been designed with performance as its primary goal and developed as a framework to allow easy plugin creation.</p>
-       <p>It comes out of the box with a set of plugins for <b>services analysis</b> and <b>embedded devices discoverage</b>. More information about those can be found in the <a href="./dev.html">dev</a> page.</p>
+       <p align="justify">"NINJA-PingU Is Not Just a Ping Utility" is a free open-source high performance network scanner tool for large scale  analyses. It has been designed with performance as its primary goal and developed as a framework to allow easy plugin creation.</p>
+       <p align="justify">It comes out of the box with a set of plugins for <b>services analysis</b> and <b>embedded devices discoverage</b>. More information about those can be found in the <a href="./dev.html">dev</a> page.</p>
 
 <br>
 
- <h3><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>Why's NINJA PingU?</h3>
+ <h3><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>How NINJA PingU Works?</h3>
 
-<p>NINJA PingU is open source, it has been designed taking network performance as a main constraint and its targeted at security researchers.</p>
+<p align="justify">NINJA PingU builds raw sockets to reduce the three-way TCP handshake latency and it's state. Directly sending IP packets also avoids the TCP stack overhead of the OS. It also implements non-blocking networking I/O in the plugin's interface by means of epoll. Each component is multithreaded and they have built caches to minimize synchronization points. In addition, the results persistment operations are buffered to reduce disk writes.</p>
 <div style="display:table-cell; vertical-align:middle; text-align:center">
 <img src="./images/NINJA PingU Architecture.png" width=80%/>
 </div>
-<p>It has been developed to easily allow developers build their custom plugins. Samples of those can be found in its <a href="https://github.com/OWASP/NINJA-PingU">codebase</a>. In addition, more information about NINJA PingU can be found in the <a href="./faq.html">FAQ</a> and <a href="./dev.html">dev</a> pages.</p>
+<br>
+ <h3><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>Why NINJA PingU?</h3>
+<p align="justify">It has been developed to easily allow developers build their custom plugins. Samples of those can be found in its <a href="https://github.com/OWASP/NINJA-PingU">codebase</a>. In addition, more information about NINJA PingU can be found in the <a href="./faq.html">FAQ</a> and <a href="./dev.html">dev</a> pages.</p>
 <br>
 <br>
       </section>
