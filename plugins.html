@@ -24,7 +24,7 @@
             <section id="downloads">
               <a class="tar_download_link" href="https://github.com/owasp/NINJA_PingU/tarball/master">Download this project as a tar.gz file</a>
               <a class="zip_download_link" href="./plugins.html">Plugins</a>
-	      <a class="dev_link" href="./dev.html">DEV</a>
+      <a class="dev_link" href="./dev.html">DEV</a>
               <a class="faq_link" href="./faq.html">FAQ</a>
               <a class="main_link" href="./index.html">main</a>
             </section>
@@ -40,9 +40,8 @@
  <p align="justify">
 The Service Discoverage plugin is targeted at performing a simple HTTP GET request to the port 80 of the targeted hosts and analyze the [Server: ] response header. The plugin is open source and included in the v0.1 package. As NINJA PingU, the plugin is open source released in its <a href="https://github.com/owasp/NINJA-PingU">codebase</a>. This plugin can be run by using the following command.</p>
 
-<pre>
-# ./bin/npingu -t 5 -p 80 1.1.1.1-255.0.0.0 -m Service<code>
-</code></pre>
+<pre><code># ./bin/npingu -t 5 -p 80 1.1.1.1-255.0.0.0 -m Service</code></pre>
+
 <p align="justify">The [-t 5] sets the number of flags, the [-p 80] the port range to scan, [-m Service] loads the service and embedded device discoverage plugin. The following and several other devices are currently supported.</p>
 
 <br>
