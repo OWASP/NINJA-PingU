@@ -14,19 +14,19 @@ Requirements
 
 Setting Up NINJA PingU
 ---------------------
-       $ git clone https://github.com/OWASP/NINJA-PingU.git; cd ninjaPingu; ./npingu.sh
+       $git clone https://github.com/OWASP/NINJA-PingU.git; cd ninjaPingu; ./npingu.sh
 
 Usage
 -----
- #  sudo ./bin/npingu [OPTIONS] targets
+       # sudo ./bin/npingu [OPTIONS] targets
 
- -t	Number of sender threads.
- -p	Port scan range. For instance, 80 or 20-80.
- -d	Delay between packages sent (in usecs).
- -s	No service discoverage (less bandwith load, more hosts/time).
- -m	Module to run. For instance, Service.
- -h	Show this help.
- [targets] Ip address seed. For instance, 192.168.1. or 1.1.1.1-255.0.0.0
+      -t	Number of sender threads.
+      -p	Port scan range. For instance, 80 or 20-80.
+      -d	Delay between packages sent (in usecs).
+      -s	No service discoverage (less bandwith load, more hosts/time).
+      -m	Module to run. For instance, Service.
+      -h	Show this help.
+      [targets] Ip address seed. For instance, 192.168.1. or 1.1.1.1-255.0.0.0
 
 
  NINJA Pingu comes with a bash script to automate process compilation, operating system performance tuning, and enhanced user interface with terminator integration. It can be run by running the following command.
@@ -36,7 +36,7 @@ Usage
 
 Examples
 --------
-   # ./bin/npingu -t 3 -p 20-80 188.1.1.1-188.255.1.1 -d 1 -m Service
+       # ./bin/npingu -t 3 -p 20-80 188.1.1.1-188.255.1.1 -d 1 -m Service
 
       -Targeted Hosts [188.165.83.148-188.255.83.148]
       -Targeted Port Range [20-80]
@@ -45,7 +45,7 @@ Examples
       -Use the Service discoverage Module
 
 
-   #  ./bin/npingu -t 5 -p 80 -s 74.125.0.0-74.125.255.255 #scan google
+      # ./bin/npingu -t 5 -p 80 -s 74.125.0.0-74.125.255.255 #scan google
 
       -Targeted Hosts [74.125.0.0-74.125.255.255]
       -Targeted Port [80]
