@@ -36,6 +36,9 @@ Usage
 
 Examples
 --------
+
+Example to scan some OVH servers:
+
        # ./bin/npingu -t 3 -p 20-80 188.1.1.1-188.255.1.1 -d 1 -m Service
 
       -Targeted Hosts [188.165.83.148-188.255.83.148]
@@ -43,10 +46,11 @@ Examples
       -Threads [3]
       -Delay 1 usec
       -Use the Service discoverage Module
-
-
+ 
+Example to scan several google web servers:
+ 
       # ./bin/npingu -t 5 -p 80 -s 74.125.0.0-74.125.255.255 #scan google
-
+      
       -Targeted Hosts [74.125.0.0-74.125.255.255]
       -Targeted Port [80]
       -Threads [5]
