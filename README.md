@@ -6,21 +6,18 @@ It comes out of the box with a set of plugins for services analysis and embedded
 
 
 Requirements
-============
-
- - Compiler
+------------
+ - gcc
  - Linux box. Will not work neither on *BSD or Windows OS.
- - Hands and a Brain
+ - Root Privileges
 
 
 Setting Up NINJA PingU
-=====
-
+---------------------
  $ git clone https://github.com/OWASP/NINJA-PingU.git; cd ninjaPingu; ./npingu.sh
 
 Usage
-=====
-
+-----
  #  sudo ./bin/npingu [OPTIONS] targets
 
  -t	Number of sender threads.
@@ -38,8 +35,7 @@ Usage
 
 
 Examples
-========
-
+--------
    # ./bin/npingu -t 3 -p 20-80 188.1.1.1-188.255.1.1 -d 1 -m Service
 
       -Targeted Hosts [188.165.83.148-188.255.83.148]
@@ -57,14 +53,12 @@ Examples
       -s synOnly scan
 
 Bugs & Contact
-==============
-
+--------------
 Feel free to mail me with any problem, bug, suggestions or fixes at:
 Guifre Ruiz <guifre.ruiz@owasp.org>
 
 Visit http://owasp.github.io/NINJA-PingU for more information about NINJA PingU.
 
 License
-==============
-
+-------
 Code licensed under the GPL v3.0.
