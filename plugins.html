@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="OWASP NINJA PingU: Is Not Just a Ping Utility" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>OWASP NINJA PingU</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/owasp/NINJA-PingU">View on GitHub</a>
+
+          <h1 id="project_title">OWASP NINJA PingU</h1>
+          <h2 id="project_tagline">Is Not Just A Ping Utility.</h2>
+
+            <section id="downloads">
+              <a class="tar_download_link" href="https://github.com/owasp/NINJA_PingU/tarball/master">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="./plugins.html">Plugins</a>
+	      <a class="dev_link" href="./dev.html">DEV</a>
+              <a class="faq_link" href="./faq.html">FAQ</a>
+              <a class="main_link" href="./index.html">main</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+      <br>
+      <h3><span class="octicon octicon-link"></span>Embedded Devices & Services Discoverage Plugin</h3>
+      <p align="justify">Recently, Bruce Schneier <a href="https://www.schneier.com/blog/archives/2014/01/security_risks_9.html">wrote</a> about the security risks of <a href="http://arstechnica.com/gadgets/2014/01/smart-tvs-smart-fridges-smart-washing-machines-disaster-waiting-to-happen/?utm_content=buffer7dde1&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer">embedded systems</a>. To perform a simple experiment, I wrote a PoC plugin for NINJA PingU for services analysis and embedded devices discoverage.NINJA PingU comes out of the box with it.</p>
+ <p align="justify">
+The Service Discoverage plugin is targeted at performing a simple HTTP GET request to the port 80 of the targeted hosts and analyze the [Server: ] response header. The plugin is open source and included in the v0.1 package. As NINJA PingU, the plugin is open source released in its <a href="https://github.com/owasp/NINJA-PingU">codebase</a>. This plugin can be run by using the following command.</p>
+
+<pre>
+# ./bin/npingu -t 5 -p 80 1.1.1.1-255.0.0.0 -m Service<code>
+</code></pre>
+<p align="justify">The [-t 5] sets the number of flags, the [-p 80] the port range to scan, [-m Service] loads the service and embedded device discoverage plugin. The following and several other devices are currently supported.</p>
+
+<br>
+<h4> · Network Cameras</h4>
+<div style="display:table-cell; vertical-align:middle; text-align:center">
+<a href="./images/services/cam.png"><img src="./images/services/cam.png" width=90%/></a>
+</div>
+<br>
+
+<h4> · Printers</h4>
+<div style="display:table-cell; vertical-align:middle; text-align:center">
+<a href="./images/services/printer.png"><img src="./images/services/printer.png" width=90%/></a>
+</div>
+
+<h4> · Smart TV Devices</h4>
+<div style="display:table-cell; vertical-align:middle; text-align:center">
+<a href="./images/services/tv.png"><img src="./images/services/tv.png" width=90%/></a>
+</div>
+
+
+<h4> · Solar Power Plants</h4>
+<div style="display:table-cell; vertical-align:middle; text-align:center">
+<a href="./images/services/solarPlant.png"><img src="./images/services/solarPlant.png" width=90%/></a>
+</div>
+
+
+<h4> · Power Control Devices</h4>
+<div style="display:table-cell; vertical-align:middle; text-align:center">
+<a href="./images/services/siemens.png"><img src="./images/services/siemens.png" width=90%/></a>
+</div>
+
+<h4> · GPS Devices</h4>
+<div style="display:table-cell; vertical-align:middle; text-align:center">
+<a href="./images/services/gps.png"><img src="./images/services/gps.png" width=90%/></a>
+</div>
+
+<h4> · Network Disk Devices</h4>
+<div style="display:table-cell; vertical-align:middle; text-align:center">
+<a href="./images/services/disk.png"><img src="./images/services/disk.png" width=90%/></a>
+</div>
+
+And many other kinds are supported. Note: not brute force or guess attacks have been carried out, the devices were open on the Internet, no security measures have been broken or bypassed.
+
+
+
+
+<br>
+       
+      </section>
+    </div>
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">OWASP NINJA-PingU maintained by <a href="https://github.com/guifre">guifre</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

@@ -22,8 +22,9 @@
           <h2 id="project_tagline">Is Not Just A Ping Utility.</h2>
 
             <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/owasp/NINJA_PingU/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/owasp/NINJA_PingU//tarball/master">Download this project as a tar.gz file</a>            <a class="dev_link" href="./dev.html">DEV</a>
+              <a class="tar_download_link" href="https://github.com/owasp/NINJA_PingU//tarball/master">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="./plugins.html">Plugins</a>
+	      <a class="dev_link" href="./dev.html">DEV</a>
               <a class="faq_link" href="./faq.html">FAQ</a>
               <a class="main_link" href="./index.html">main</a>
             </section>
@@ -35,22 +36,30 @@
       <section id="main_content" class="inner">
        <br> <h3><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>What's NINJA PingU?</h3>
 
-       <p align="justify">"NINJA-PingU Is Not Just a Ping Utility" is a free open-source high performance network scanner tool for large scale  analyses. It has been designed with performance as its primary goal and developed as a framework to allow easy plugin creation.</p>
-       <p align="justify">It comes out of the box with a set of plugins for <b>services analysis</b> and <b>embedded devices discoverage</b>. More information about those can be found in the <a href="./dev.html">dev</a> page.</p>
+       <p align="justify"><i>NINJA-PingU Is Not Just a Ping Utility<i/> is a free open-source high performance network scanner tool for large scale  analyses. It has been designed with performance as its primary goal and developed as a framework to allow easy plugin creation.</p>
+       <p align="justify">It comes out of the box with a set of plugins for <b>services analysis</b> and <b>embedded devices discoverage</b>. More information about those can be found in the <a href="./dev.html">dev</a> and <a href="./plugins.html">plugins</a> pages.</p>
 
 <br>
 
  <h3><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>How NINJA PingU Works?</h3>
 
-<p align="justify">NINJA PingU builds raw sockets to reduce the three-way TCP handshake latency and it's state. Directly sending IP packets also avoids the TCP stack overhead of the OS. It also implements non-blocking networking I/O in the plugin's interface by means of epoll. Each component is multithreaded and they have built caches to minimize synchronization points. In addition, the results persistment operations are buffered to reduce disk writes.</p>
+<p align="justify">NINJA PingU takes advantage of raw sockets to reduce the three-way TCP handshake latency and it's state. Directly sending IP packets also avoids the TCP stack overhead.</p>
 <div style="display:table-cell; vertical-align:middle; text-align:center">
 <img src="./images/NINJA PingU Architecture.png" width=80%/>
 </div>
+<p align="justify">It also implements non-blocking networking I/O in the plugin's interface by means of epoll. Each component is multithreaded and they have built-in caches to minimize synchronization points. In addition, the results persistment operations are buffered to reduce disk writes.<p/>
 <br>
  <h3><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>Why NINJA PingU?</h3>
 <p align="justify">It has been developed to easily allow developers build their custom plugins. Samples of those can be found in its <a href="https://github.com/OWASP/NINJA-PingU">codebase</a>. In addition, more information about NINJA PingU can be found in the <a href="./faq.html">FAQ</a> and <a href="./dev.html">dev</a> pages.</p>
+<div style="display:table-cell; vertical-align:middle; text-align:center">
+<a href="./images/ninjapinguplot.png"><img src="./images/ninjapinguplot.png" width=90%/></a>
+</div>
+<p align="justify">NINJA PingU also integrates gnuplot to automatically plot the analysis results. In addition, a custom terminator has been embedded for enhanced data visualization.</p>
 <br>
 <br>
+
+
+
       </section>
     </div>
 
