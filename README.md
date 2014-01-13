@@ -7,14 +7,14 @@ It comes out of the box with a set of plugins for services analysis and embedded
 
 Requirements
 ------------
- - gcc
- - Linux box. Will not work neither on *BSD or Windows OS.
- - Root Privileges
+      - gcc
+      - Linux box. Will not work neither on *BSD or Windows OS.
+      - Root Privileges
 
 
 Setting Up NINJA PingU
 ---------------------
- $ git clone https://github.com/OWASP/NINJA-PingU.git; cd ninjaPingu; ./npingu.sh
+       $ git clone https://github.com/OWASP/NINJA-PingU.git; cd ninjaPingu; ./npingu.sh
 
 Usage
 -----
