@@ -13,11 +13,10 @@ Requirements
  - Hands and a Brain
 
 
-Build
+Setting Up NINJA PingU
 =====
 
-$ make
-
+ $ git clone https://github.com/OWASP/NINJA-PingU.git; cd ninjaPingu; ./npingu.sh
 
 Usage
 =====
