@@ -38,7 +38,7 @@
       <h3><span class="octicon octicon-link"></span>Embedded Devices & Services Discoverage Plugin</h3>
       <p align="justify">Recently, Bruce Schneier <a href="https://www.schneier.com/blog/archives/2014/01/security_risks_9.html">wrote</a> about the security risks of <a href="http://arstechnica.com/gadgets/2014/01/smart-tvs-smart-fridges-smart-washing-machines-disaster-waiting-to-happen/?utm_content=buffer7dde1&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer">embedded systems</a>. To perform a simple experiment, I wrote a PoC plugin for NINJA PingU for services analysis and embedded devices discoverage.NINJA PingU comes out of the box with it.</p>
  <p align="justify">
-The Service Discoverage plugin is targeted at performing a simple HTTP GET request to the port 80 of the targeted hosts and analyze the [Server: ] response header. The plugin is open source and included in the v0.1 package. As NINJA PingU, the plugin is open source released in its <a href="https://github.com/owasp/NINJA-PingU">codebase</a>. This plugin can be run by using the following command.</p>
+The Service Discoverage plugin is targeted at performing a simple HTTP GET request to the port 80 of the targeted hosts and analyze Server banner response header. The plugin is open source and included in the v1.0 package. As NINJA PingU, the plugin is open source released in its <a href="https://github.com/owasp/NINJA-PingU">codebase</a>. This plugin can be run by using the following command.</p>
 
 <pre><code># ./bin/npingu -t 5 -p 80 1.1.1.1-255.0.0.0 -m Service</code></pre>
 
