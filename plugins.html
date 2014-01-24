@@ -35,6 +35,13 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
       <br>
+      <h3><span class="octicon octicon-link"></span>32764/TCP Backdoor Scanner Plugin</h3>
+
+      <p align="justify">Millions of routers have been affected by <a href="https://www.google.es/search?q=32764+backdoor">a backdoor</a> that gives full remote root access to the device. Backdoor32764 is the new plugin that scans hosts affected by this backdoor. It is available in the NINJA PingU <a href="https://github.com/owasp/NINJA-PingU">codebase</a>.  You can run this plugin as follows.</p>
+<pre><code># ./bin/npingu -t 2 -p 32764 1.1.1.1-255.0.0.0 -m Backdoor32764</code></pre>
+
+<br>
+
       <h3><span class="octicon octicon-link"></span>Embedded Devices & Services Discoverage Plugin</h3>
       <p align="justify">Recently, Bruce Schneier <a href="https://www.schneier.com/blog/archives/2014/01/security_risks_9.html">wrote</a> about the security risks of <a href="http://arstechnica.com/gadgets/2014/01/smart-tvs-smart-fridges-smart-washing-machines-disaster-waiting-to-happen/?utm_content=buffer7dde1&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer">embedded systems</a>. To perform a simple experiment, I wrote a PoC plugin for NINJA PingU for services analysis and embedded devices discoverage.NINJA PingU comes out of the box with it.</p>
  <p align="justify">
@@ -42,7 +49,7 @@ The Service Discoverage plugin is targeted at performing a simple HTTP GET reque
 
 <pre><code># ./bin/npingu -t 5 -p 80 1.1.1.1-255.0.0.0 -m Service</code></pre>
 
-<p align="justify">The [-t 5] sets the number of flags, the [-p 80] the port range to scan, [-m Service] loads the service and embedded device discoverage plugin. The following and several other devices are currently supported.</p>
+<p align="justify">The [-t 5] sets the number of spotter threads, the [-p 80] specifies the targeted port, [-m Service] loads the service and embedded device identification plugin. The following and several other devices are currently supported.</p>
 
 <br>
 <h4> · Network Cameras</h4>
