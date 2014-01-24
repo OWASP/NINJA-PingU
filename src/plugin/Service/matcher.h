@@ -19,7 +19,7 @@
 #define httpServSize 2
 #define httpInfoSize 16
 
-#define camServSize 29
+#define camServSize 40
 #define printServSize 8
 
 #define telnetServSize 2
@@ -38,6 +38,18 @@
 
 regex_t cam_serv_matcher[camServSize];
 const char *cam_serv_str[][2] = { {"MOBOTIX", "IPCamera (MOBOTIX)"},
+	{"Server: asic.NET", "ASIC Controller. Default admin:admin"},
+	{"Server: gunicorn", "Camera. Default no pswd"},
+	{"Server: TAC/Xenta", "router. Default root:root"},
+	{"Server: NetEVI", "Camera. Default no pswd"},
+	{"Server: EWS-NIC", "Priner"},
+	{"Server: MWS/", "Camera. Default no pswd"},
+	{"Server: NVR4CH", "Camera. Default admin:admin"},
+	{"Server: go1984", "Camera. Default no pswd"},
+	{"Server: Enigma2", "Smart TV. Default no pswd"},
+	{"Server: IQinVision", "Camera"},
+	{"Server: IPOffice", "Priner"},
+
 								  {"<title>Spectra", "IPCamera (Spectra)"},
 								  {"Server: Siemens Switzerland", "Central Communication Unit (Siemens)"},
 								  {"Network Camera", "IPCamera (AXIS CAM)"},	
