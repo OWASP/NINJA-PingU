@@ -2,7 +2,7 @@ NINJA PingU
 ===========
 NINJA-PingU Is Not Just a Ping Utility is a free open-source high performance network scanner tool for large scale analyses. It has been designed with performance as its primary goal and developed as a framework to allow easy plugin creation.
 
-It comes out of the box with a set of plugins for services analysis and embedded devices discoverage. More information about those can be found in its home page at http://owasp.github.io/NINJA-PingU
+It comes out of the box with a set of plugins for services analysis and embedded devices identification. More information about those can be found in its home page at http://owasp.github.io/NINJA-PingU
 
 
 Requirements
@@ -23,7 +23,7 @@ Usage
       -t	Number of sender threads.
       -p	Port scan range. For instance, 80 or 20-80.
       -d	Delay between packages sent (in usecs).
-      -s	No service discoverage (less bandwith load, more hosts/time).
+      -s	No service identification (less bandwith load, more hosts/time).
       -m	Module to run. For instance, Service.
       -h	Show this help.
       [targets] Ip address seed. For instance, 192.168.1. or 1.1.1.1-255.0.0.0
@@ -45,16 +45,26 @@ Example to scan some OVH servers:
       -Targeted Port Range [20-80]
       -Threads [3]
       -Delay 1 usec
-      -Use the Service discoverage Module
- 
+      -Use the Service identification Module
+
 Example to scan several google web servers:
- 
-      # ./bin/npingu -t 5 -p 80 -s 74.125.0.0-74.125.255.255 #scan google
-      
+
+      # ./bin/npingu -t 5 -p 80 -s 74.125.0.0-74.125.255.255
+
       -Targeted Hosts [74.125.0.0-74.125.255.255]
       -Targeted Port [80]
       -Threads [5]
       -s synOnly scan
+
+Example for scanning the 32764/TCP Backdoor
+
+      # ./bin/npingu -t 2 1.1.1.1-255.1.1.1 -m Backdoor32764 -p 32764
+
+      -Targeted Hosts [1.1.1.1-255.1.1.1]
+      -Targeted Port [32764]
+      -Threads [2]
+      -Use the 32764/TCP Backdoor Module
+
 
 Bugs & Contact
 --------------
