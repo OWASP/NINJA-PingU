@@ -31,10 +31,10 @@ function show_header {
 	printf "\nOWASP NINJA PingU Is Not Just A Ping Utility\n=============================================\n\n";
 }
 
-avoid_drop_pkt="iptables -A OUTPUT -p tcp -m tcp --tcp-flags RST,RST RST,RST -j DROP;";
+avoid_drop_pkt="iptables -A OUTPUT -p tcp -m tcp --tcp-flags RST,RST RST,RST -j DROP";
 inc_descriptors="ulimit -n 99999";
 undo_avoid_drop_pkt="iptables -D OUTPUT -p tcp -m tcp --tcp-flags RST,RST RST,RST -j DROP";
-
+exit_alias="alias exit='tmux kill-window -t :0'";
 
 show_header;
 echo "-Compiling NINJA PingU";
@@ -46,13 +46,20 @@ if [ ! -f "bin/npingu" ]; then
 else
 	echo "-NINJA PingU Compiled successfully";
 	printf "¿Tune Linux for better performance(root required)[y/n]? ";
-	read ans;
-	if [ "$ans" == "y" ]; then
-		export -f run_npinguu
-		su -c "${inc_descriptors} ${avoid_drop_pkt} run_npinguu";
-	else
-		echo "running $run_npingu";
-		run_npinguu;
+	read tune;
+	printf "¿Launch npingu UI[y/n]? ";
+	read ui;
+	if [ "$tune" == "y" ]  &&  [ "$ui" == "y" ]; then
+		export -f run_npingu
+		su -c "${exit_alias}; ${inc_descriptors}; ${avoid_drop_pkt}; run_npingu";
+	elif  [ "$tune" == "n" ]  &&  [ "$ui" == "y" ]; then
+		export -f run_npingu
+		su -c "$exit_alias}; run_npingu";
+	elif  [ "$tune" == "y" ]  &&  [ "$ui" == "n" ]; then
+		su -c "${inc_descriptors}; ${avoid_drop_pkt}; ./bin/npingu -h";
+	elif [ "$tune" == "n" ]  &&  [ "$ui" == "n" ]; then
+		./bin/npingu -h;
 	fi
 fi
+
 
