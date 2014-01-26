@@ -23,37 +23,36 @@ function compile_pingu {
 	make npingu > /dev/null;
 }
 
-#Lauches tuned terminator for better user experience
-function run_terminator {
-	oldVar=`echo $XDG_CONFIG_HOME`;
-	echo $oldVar;
-	export XDG_CONFIG_HOME="./lib";
-	./lib/terminator/terminator --layout=npingu --maximise 2>/dev/null &
-	export XDG_CONFIG_HOME=${oldVar};
+function run_npingu {
+	tmux new-session -d 'echo -e "\e[34mHosts Found\n";tail -F out/hostsScanned.out' \; split-window -d -p 30 \; attach \; split-window -h -p 90 'echo -e "\e[32m\e[107mServices Found\n"; tail -F out/servicesScanned.out' \; split-window -h 'tail -F out/debug.out' \; select-pane -t 3 \; split-window -h -p 30 'echo -e "\e[91mEmbedded Devices Found\n";tail -F out/specialServicesScanned.out' \;  select-pane -t 3 \; attach \; send-keys -t "3" C-z './bin/npingu' Enter;
 }
 
-#Tune Linux for better performance
-function tune_linux {
-	printf "Tune Linux for better performance(root required)[y/n]? ";
-	read ans;
-	if [ "$ans" == "y" ]; then
-		su;
-		ulimit -n 9119;
-		su $LOGNAME;
-	fi
+function show_header {
+	printf "\nOWASP NINJA PingU Is Not Just A Ping Utility\n=============================================\n\n";
 }
 
-echo "Compiling NINJA PingU";
+avoid_drop_pkt="iptables -A OUTPUT -p tcp -m tcp --tcp-flags RST,RST RST,RST -j DROP;";
+inc_descriptors="ulimit -n 99999";
+undo_avoid_drop_pkt="iptables -D OUTPUT -p tcp -m tcp --tcp-flags RST,RST RST,RST -j DROP";
+
+
+show_header;
+echo "-Compiling NINJA PingU";
 compile_pingu;
 
 #Checks successful compilation
 if [ ! -f "bin/npingu" ]; then
-	echo "Seems like the compilation was not successful :(";
+	echo "-Seems like the compilation was not successful :(";
 else
-	echo "NINJA PingU Compiled successfully";
-	#todo fix this
-	#tune_linux;
-	echo "Invoking custom terminator, have fun.";
-	run_terminator;
+	echo "-NINJA PingU Compiled successfully";
+	printf "¿Tune Linux for better performance(root required)[y/n]? ";
+	read ans;
+	if [ "$ans" == "y" ]; then
+		export -f run_npinguu
+		su -c "${inc_descriptors} ${avoid_drop_pkt} run_npinguu";
+	else
+		echo "running $run_npingu";
+		run_npinguu;
+	fi
 fi
 

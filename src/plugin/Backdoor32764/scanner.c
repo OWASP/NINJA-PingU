@@ -22,7 +22,12 @@
 #include <string.h>
 #include "../../pers.c"
 
-char *payload="ScMM"; // looks for 0x53634D4D and 0x4D4D6353 response
+//constants for the ou
+char *vuln = "vulnerable";
+char *patched = "patched";
+
+//payload to look for 0x53634D4D and 0x4D4D6353
+const char *payload = "ScMM";
 
 void onInitPlugin()
 {
@@ -41,8 +46,8 @@ void getServiceInput(int port, char *msg) {
 void provideOutput(char *host, int port, char *msg)
 {
 	if(strstr(msg, payload) != NULL && synOnly == FALSE) {
-		persistServ(host, port, "vulnerable");
+		persistServ(host, port, vuln);
 	} else {
-		persistServ(host, port, "patched");
+		persistServ(host, port, patched);
 	}
 }

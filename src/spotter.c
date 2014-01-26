@@ -156,7 +156,8 @@ void *start_sender(void *agentI) {
 	//temporary cache to hold attempted hosts
 	int tmpAttemptedHosts = 0;
 
-	if (aInfo->tPort[1] > aInfo->tPort[0]) {    //if we are scanning a set of port targets 
+	//if we are scanning a set of port targets
+	if (aInfo->tPort[1] > aInfo->tPort[0]) {
 		int port = aInfo->tPort[0];
 		while (endOfScan == FALSE && ip != NULL && aInfo->run == TRUE) {
 			usleep(delay);
@@ -164,16 +165,14 @@ void *start_sender(void *agentI) {
 			sin.sin_port = htons(port);
 			sin.sin_addr.s_addr = inet_addr(ip);
 			iph->daddr = sin.sin_addr.s_addr;
-			iph->check = csum((unsigned short *) mDatagram, iph->tot_len >> 1);			
+			iph->check = csum((unsigned short *) mDatagram, iph->tot_len >> 1);
 			getMeATCPHeader(tcph, aInfo->mPort, port);
 			psh.dest_address = sin.sin_addr.s_addr;
 			psh.tcp_length = htons(20);
 			memcpy(&psh.tcp, tcph, sizeof(struct tcphdr));
 			tcph->check = csum((unsigned short*) &psh, sizeof(struct pseudo_header));
 
-			if (sendto(s, mDatagram, iph->tot_len, 0, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
-				//printf("error\n");
-			} else {
+			if (sendto(s, mDatagram, iph->tot_len, 0, (struct sockaddr *) &sin, sizeof(sin)) == 0) {
 				tmpAttemptedHosts++;
 				if (tmpAttemptedHosts >= CACHE_SYNC) {
 					incAttemptedHosts(tmpAttemptedHosts);
@@ -198,14 +197,10 @@ void *start_sender(void *agentI) {
 			sin.sin_addr.s_addr = inet_addr(ip);
 			iph->daddr = sin.sin_addr.s_addr;
 			iph->check = csum((unsigned short *) mDatagram, iph->tot_len >> 1);
-
 			psh.dest_address = sin.sin_addr.s_addr;
 			tcph->source = htons(aInfo->mPort);
-
 			tcph->check = csum((unsigned short*) &psh, sizeof(struct pseudo_header));
-			if (sendto(s, mDatagram, iph->tot_len, 0, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
-				//printf("error\n");
-			} else {
+			if (sendto(s, mDatagram, iph->tot_len, 0, (struct sockaddr *) &sin, sizeof(sin)) == 0) {
 				tmpAttemptedHosts++;
 				if (tmpAttemptedHosts >= CACHE_SYNC) {
 					incAttemptedHosts(tmpAttemptedHosts);
