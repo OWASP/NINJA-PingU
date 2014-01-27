@@ -101,7 +101,6 @@ void single_port(char *ip, struct agentInfo *aInfo, struct sockaddr_in *sin, str
 	unsigned int tmpAttemptedHosts = 0;
 	unsigned int cache_sync = CACHE_SYNC;
 	while (endOfScan == FALSE && ip != NULL && aInfo->run == TRUE) {
-		//usleep(delay);
 		sin->sin_addr.s_addr = inet_addr(ip);
 		iph->daddr = sin->sin_addr.s_addr;
 		iph->check = csum((unsigned short *) mDatagram, iph->tot_len >> 1);
@@ -114,11 +113,8 @@ void single_port(char *ip, struct agentInfo *aInfo, struct sockaddr_in *sin, str
 			incAttemptedHosts(tmpAttemptedHosts);
 			tmpAttemptedHosts = 0;
 		}
-		if (ip != NULL) {
-			free(ip);
-		}
 		pthread_mutex_lock (&sLock);
-		ip = getNext();
+		getNext2(ip);
 		pthread_mutex_unlock(&sLock);
 	}
 }
@@ -142,11 +138,8 @@ void single_port_delay(char *ip, struct agentInfo *aInfo, struct sockaddr_in *si
 			incAttemptedHosts(tmpAttemptedHosts);
 			tmpAttemptedHosts = 0;
 		}
-		if (ip != NULL) {
-			free(ip);
-		}
 		pthread_mutex_lock (&sLock);
-		ip = getNext();
+		getNext2(ip);
 		pthread_mutex_unlock(&sLock);
 	}
 }
@@ -176,11 +169,8 @@ void multiple_port(char *ip, struct agentInfo *aInfo, struct sockaddr_in *sin, s
 			port++;
 			if (port > aInfo->tPort[1]) {
 				port = aInfo->tPort[0];
-				if (ip != NULL) {
-					free(ip);
-				}
 				pthread_mutex_lock (&sLock);
-				ip = getNext();
+				getNext2(ip);
 				pthread_mutex_unlock(&sLock);
 			}
 		}
@@ -215,12 +205,9 @@ void multiple_port_delay(char *ip, struct agentInfo *aInfo, struct sockaddr_in *
 			port++;
 			if (port > aInfo->tPort[1]) {
 				port = aInfo->tPort[0];
-				if (ip != NULL) {
-					free(ip);
-				}
-
+				
 				pthread_mutex_lock (&sLock);
-				ip = getNext();
+				getNext2(ip);
 				pthread_mutex_unlock(&sLock);
 			}
 		}
@@ -249,7 +236,8 @@ void *start_sender(void *agentI) {
 
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(aInfo->tPort[0]);
-	char *ip = getNext();
+	char *ip = malloc(sizeof(char)*50);
+	getNext2(ip);
 	sin.sin_addr.s_addr = inet_addr(ip);
 
 	memset(mDatagram, 0, 2096); /* zero out the buffer */

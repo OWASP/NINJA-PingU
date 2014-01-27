@@ -50,7 +50,7 @@ unsigned int seed_ip[4] = {80,58,0,0};
 
 //seed_ip[3] = 0, seed_ip[2] = 0, seed_ip[1] = 59, seed_ip[0] = 80;
 int maxIp[4] = {224,0,0,0};
-
+char *maxOct;
 
 char *getUS()
 { //100.128.0.0-100.255.255.255
@@ -77,13 +77,12 @@ char *getNext()
 {
 	char *str;
 	str = (char *) malloc(19 * sizeof(char));
-	//if we reached the limit, returns null
 	if( (seed_ip[0] > maxIp[0]) ||
-		(seed_ip[0] == maxIp[0] && seed_ip[1] > maxIp[1]) ||
-		(seed_ip[0] == maxIp[0] && seed_ip[1] == maxIp[1] && seed_ip[2] > maxIp[2]) ||
-		(seed_ip[0] == maxIp[0] && seed_ip[1] == maxIp[1] && seed_ip[2] == maxIp[2] && seed_ip[3] >=maxIp[3]) ) {
-		return NULL;
-	} else if (seed_ip[3] < 254) {
+			(seed_ip[0] == maxIp[0] && seed_ip[1] > maxIp[1]) ||
+			(seed_ip[0] == maxIp[0] && seed_ip[1] == maxIp[1] && seed_ip[2] > maxIp[2]) ||
+			(seed_ip[0] == maxIp[0] && seed_ip[1] == maxIp[1] && seed_ip[2] == maxIp[2] && seed_ip[3] >=maxIp[3]) ) {
+			return NULL;
+		} else if (seed_ip[3] < 254) {
 		seed_ip[3]++;
 		if (seed_ip[0] == 192 && seed_ip[1] == 168 && seed_ip[2] == 0 && seed_ip[3] < 8)
 		{
@@ -126,7 +125,48 @@ char *getNext()
 		return NULL;
 	}
 	snprintf(str, 199, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
-	return str;
+	
+		return str;
+	
+}
+
+void getNext2(char *str)
+{
+	//if we reached the limit, returns null
+	if (seed_ip[3] < 255) {
+		seed_ip[3]++;
+	} else if (seed_ip[2] < 255) {
+		seed_ip[3] = 0;
+		seed_ip[2]++;
+	} else if (seed_ip[1] < 255) {
+		seed_ip[3] = 0;
+		seed_ip[2] = 0;
+		seed_ip[1]++;
+		if (seed_ip[1] == 168 && seed_ip[3] == 192) {
+			seed_ip[1] = 169;
+		} else if (seed_ip[1] == 16 && seed_ip[0] == 172) {
+			seed_ip[1] = 32;
+		} else if (seed_ip[0] == 100 && seed_ip[1] == 64) {
+			seed_ip[1] = 128;
+		} else if (seed_ip[0] == 198 && seed_ip[1] == 18) {
+			seed_ip[1] = 20;
+		}
+	} else if (seed_ip[0] < 224) {
+		seed_ip[3] = 0;
+		seed_ip[2] = 0;
+		seed_ip[1] = 0;
+		seed_ip[0]++;
+		if (seed_ip[0] == 10 || seed_ip[0] == 0 || seed_ip[0] == 127) { /*avoid 0.x.x.x, 10.x.x.x and 127.x.x.x.x*/
+			seed_ip[0]++;
+		}
+	} else {
+		str= NULL;
+	}
+	snprintf(str, 52, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
+	if (strcmp(str, maxOct) == 0) {
+		str = NULL;
+		endOfScan = TRUE;
+	}
 }
 
 

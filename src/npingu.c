@@ -60,7 +60,8 @@ void parseIpAddresses(char *in)
 		  for(i=0; i < 4; i++)
 			  maxIp[i] = seed_ip[i]; 
 	  }
-	  
+	  maxOct=malloc(sizeof(char)*30);
+	  snprintf(maxOct, 199, "%d.%d.%d.%d", maxIp[0], maxIp[1], maxIp[2], maxIp[3]);
 }
 
 void parsePorts(unsigned int* ports[2], char *in)
@@ -209,6 +210,8 @@ int main(int args, char **argv) {
 	
     //variables to hold execution time data
     struct timeval  tv1, tv2;
+	
+
 
     // catch SIGINT to exit in a clean way
     struct sigaction sa;
@@ -281,7 +284,7 @@ int main(int args, char **argv) {
 		printf("\t+Local IP \t\t\t\t[%s]\n", mIp);
 	}
 	printf("##################################################################\n");
-
+	
 	//semaphore for synchronization purposes
 	sem_t s;
 	sem_init(&s, 0, 0);
