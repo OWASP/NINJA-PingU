@@ -18,7 +18,7 @@
 
 
 //number of sender threads per receivers
-#define RCVR_X_SNDR 19
+#define RCVR_X_SNDR 300
 
 //seed for socke ports
 #define MAGIC_PORT 54321
@@ -27,7 +27,9 @@
 #define MAGIC_ACKSEQ 1234
 
 //maximum sockets for epoll
-#define MAX_SOCKS 100000
+#define MAX_SOCKS 200000
+
+#define DELAY_LISTENER 4
 
 #define RATIO 1;
 
@@ -53,7 +55,7 @@
 #define UNKNOWN "UNKNOWN"
 
 //cache size to hold temporary data withing the thread (the bigger the less sync)
-#define CACHE_SYNC  10
+#define CACHE_SYNC  1
 
 //my boolean algebra
 #define TRUE 1

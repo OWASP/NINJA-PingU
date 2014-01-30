@@ -34,6 +34,8 @@ pthread_mutex_t fLock;
 pthread_mutex_t aLock;
 pthread_mutex_t sLock;
 
+int statsEnd = FALSE;
+
 void incFoundHosts(int newV) {
 	pthread_mutex_lock(&fLock);
 	stats.foundHosts = stats.foundHosts+ newV;
@@ -60,9 +62,14 @@ void *printstats(void *sem) {
 	printf("\n\n#################\t\t###############\t\t###############\n#Attempted Hosts#\t\t#Found   Hosts#\t\t#    Speed    #\n#################\t\t###############\t\t###############\n");
 	unsigned long long atte;
 	unsigned long long foun;
-	while (endOfScan == FALSE)
+	int j;
+	int k = DELAY_LISTENER;
+	while (statsEnd == FALSE && (endOfScan == FALSE || k >= 0))
 	{
 		sleep(1);
+		if (endOfScan == TRUE) {
+			k--;
+		}
 		speed = stats.attemptedHosts  - oldAttempted;
 		atte = stats.attemptedHosts;
 		foun = stats.foundHosts;
@@ -75,7 +82,6 @@ void *printstats(void *sem) {
 		} else {
 			units = '\0';
 		}
-		int j = 0;
 		for (j=0; j < 100; j++)
 			printf("\r#%15llu#\t\t#%13llu#\t\t#%3llu%cpkts/sec#", atte, foun, speed, units);
 		oldAttempted = stats.attemptedHosts;

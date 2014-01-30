@@ -110,7 +110,7 @@ void checkStop()
 		if (endOfScan == TRUE) {
 			break;
 		} else {
-			sleep(1);
+			sleep(2);
 		}
 	}
 }
@@ -140,8 +140,9 @@ void interrupt(int signal_id)
 		exit(0);
 	}
 	if (signal_id == 2) {
-        endOfScan = TRUE;
-        sleep(1);
+		statsEnd = TRUE;
+        	endOfScan = TRUE;
+        	sleep(1);
 		printf("\n\nCatched Stop Signal. Gratefully stopping, you sir have a nice day.\n");
 	} else {
 		printf("\n\nCatched unknwon signal [%d] Ignoring it.\n\n ", signal_id);
@@ -332,7 +333,6 @@ int main(int args, char **argv) {
 	printf("##################################################################\n");
 	
 	gettimeofday(&tv1, NULL);
-
 	checkStop();
 	gettimeofday(&tv2, NULL);
 	double analysisTime = (double) (tv2.tv_usec - tv1.tv_usec) / 1000000 + (double) (tv2.tv_sec - tv1.tv_sec);
@@ -346,13 +346,12 @@ int main(int args, char **argv) {
 	}
 
 	//we for the threads
-	for (i = 0; i < recT; i++) {
-		pthread_join(receivers[i], NULL);
-	}
 	for (i = 0; i < sendT; i++) {
 		pthread_join(senders[i], NULL);
 	}
-
+	for (i = 0; i < recT; i++) {
+		pthread_join(receivers[i], NULL);
+	}
 
 	pthread_join(statsprinter, NULL);
 

@@ -226,8 +226,8 @@ void *start_sender(void *agentI) {
 	char *mDatagram = malloc(sizeof(char) * 4096);
 
 	//IP header
-
 	struct iphdr *iph = (struct iphdr *) mDatagram;
+	
 	//TCP header
 	struct tcphdr *tcph = (struct tcphdr *) (mDatagram + sizeof(struct ip));
 
@@ -285,8 +285,11 @@ void *start_sender(void *agentI) {
 		}
 
 	}
-	//sleep(1);
+	if(stats.attemptedHosts < 100000) {
+		sleep(DELAY_LISTENER);
+	}
 	endOfScan = TRUE;
+	statsEnd = TRUE;
 	aInfo->run = FALSE;
 	return NULL;
 }
