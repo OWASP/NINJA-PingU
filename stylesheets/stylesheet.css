@@ -371,6 +371,7 @@ Full-Width Styles
   background: url(../images/sprite_links.png) no-repeat bottom right;
   margin-left: 10px;
 }
+
 .main_link {
   display: block;
   float: right;
@@ -380,6 +381,17 @@ Full-Width Styles
   overflow: hidden;
   background: url(../images/sprite_links2.png) no-repeat bottom left;
 }
+
+.research_link {
+  display: block;
+  float: right;
+  width: 90px;
+  height:70px;
+  text-indent: -5000px;
+  overflow: hidden;
+  background: url(../images/sprite_links2.png) no-repeat bottom right;
+}
+
 .faq_link:hover {
   background: url(../images/sprite_links.png) no-repeat top left;
 }
@@ -390,6 +402,9 @@ Full-Width Styles
 
 .main_link:hover {
   background: url(../images/sprite_links2.png) no-repeat top left;
+}
+.research_link:hover {
+  background: url(../images/sprite_links2.png) no-repeat top right;
 }
 
 #main_content_wrap {

@@ -5,8 +5,8 @@
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="OWASP NINJA PingU: Is Not Just a Ping Utility" />
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <title>OWASP NINJA PingU</title>
   </head>
 
@@ -34,41 +34,22 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-      <br>
-        <h3><a name="dev" class="anchor" href="#dev"><span class="octicon octicon-link"></span></a>Plugin Development</h3>
+	<br> 	
+	<h3><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>Research</h3>
+       <p align="justify">This page lists a set of experiments carried out under this project.</p>
+	<br>
+	<h4><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>32764/TCP Backdoor Analysis</h4>
+	<p align="justify">Recently, it was discovered a backdoor that affects several routers. This backdoor, grants remote root shell access without authentication, an exploiting it is as easy as establishing a TCP connection against this port. A 20 lines plugin was written to identify the affected routers to get statistics about the amount of affected devices. The rest of the experiment can be read at <a href="http://guifreruiz.blogspot.com/2014/01/32764-TCP-Backdoor-Scanning-NINJA-PingU.html">http://guifreruiz.blogspot.com/2014/01/32764-TCP-Backdoor-Scanning-NINJA-PingU.html</a>.</p>
+<br>
 
-<p>Bulding NINJA PingU plugins is very easy. The three following C functions have to be implemented to accomplish this.</p>
-
-<h4> · Plugin Initializer</h4>
-To carry out plugin initialization actions, the following function has to be declared:
-<pre><code>void onInitPlugin();</code></pre>
-<br>
-<h4> · Plugin Finalizer</h4>
-To carry out plugin end actions, the following function has to be declared:
-<pre><code>void onStopPlugin();</code></pre>
-<br>
-<h4> · Scanner Input Provide</h4>
-The messages that the scanner will send after a successful connection are provided by the following function.
-<pre><code>void getServiceInput(int port, char *msg);</code></pre>
-<br>
-<h4> · Scanner Output Analysis</h4>
-The responses of the target will be given to the following function.
-<pre><code>void provideOutput(char *host, int port, char *msg);</code></pre>
+	<h4><a name="ninja-pingu" class="anchor" href="#ninja-pingu"><span class="octicon octicon-link"></span></a>Embedded Devices Identification</h4>
+	<p align="justify">Recently, Bruce Schneier and other experts have written about the security risks of embedded systems. To perform a simple experiment, I wrote a plugin for NINJA PingU to identify those. Millions of internet devices were scanned and several critical devices such as digital control services found with default passwords. The rest of the experiment can be read at <a href="http://guifreruiz.blogspot.com/2014/01/owasp-ninja-pingu-network-scanner.html">http://guifreruiz.blogspot.com/2014/01/owasp-ninja-pingu-network-scanner.html</a>.</p>
+		      
 
 <br>
-<h3><span class="octicon octicon-link"></span>Plugin Integration</h3>
-<p>Integrating a NINJA PingU is very easy, you can add to the Makefile the following file for automatic compilation.</p>
-<pre><code>gcc -c src/plugin/PLUGINNAME/scanner.c -o src/plugin/PLUGINNAME/scanner.o -pedantic -g -Wall -std=c99 -fpic -I.
-gcc -o src/plugin/PLUGINNAME/scanner.so src/plugin/PLUGINNAME/scanner.o -shared
-</code></pre>
-<br>
-<p>Using your plugin in NINJA PingU can be achieved by using the -m flag with your plugin name. For instance.</p>
- <pre><code>$ ./bin/npingu -m PLUGINNAME 1.1.1.1</code></pre>
-<br>
-<h3><span class="octicon octicon-link"></span>More Documentation</h3>
-<p>More information about plugin development and code samples can be found in the <a href="https://github.com/owasp/NINJA-PingU">NINJA PingU codebase</a>.
       </section>
     </div>
+
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
