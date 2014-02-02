@@ -41,14 +41,12 @@ pthread_mutex_t mutex_epfd = PTHREAD_MUTEX_INITIALIZER;
 
 int *start_connector(void *agentI) {
 	struct agentInfo *aInfo = agentI;
-	loadMethods();
 	
 	//wait for sync
 	sem_wait(aInfo->startB);
 	printf("\t+Connector Service started [%u]\n", aInfo->mPort);
 
 	openAckFile();
-	onInitPlugin();
 	
 	// internal variables definition
 	int i, count, datacount;

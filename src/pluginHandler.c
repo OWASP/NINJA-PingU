@@ -21,12 +21,13 @@
 #include "stats.c"
 
 
-void (*onInitPlugin)();
+void*   (*onInitPlugin)();
 void (*onStopPlugin)();
 void (*provideOutput)(char *host, int port, char *msg);
 char (*getServiceInput)(int port, char *msg);
 
-void loadMethods() {
+void loadMethods()
+{
 	char *error;
 	char plugPath[50];
 	strcpy(plugPath, "./src/plugin/");

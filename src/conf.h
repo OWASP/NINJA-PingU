@@ -67,4 +67,7 @@ int endOfScan = FALSE;
 long delay = 0;
 char *module;
 static int synOnly = FALSE;
+struct plugIn {
+	unsigned int ports[2];
+};
 #endif

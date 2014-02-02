@@ -30,7 +30,7 @@ void initRegex() {
 	int reti;
 	int size = sizeof(http_serv_str) / sizeof(http_serv_str[0]);
 	for (i = 0; i < size; i++) {
-		reti = regcomp(&http_serv_matcher[i], http_serv_str[i][0], REG_ICASE);
+		reti = regcomp(&http_serv_matcher[i], http_serv_str[i][0], REG_EXTENDED);
 		if (reti) {
 			perror("Could not compile regex\n");
 			exit(0);
@@ -38,7 +38,7 @@ void initRegex() {
 	}
 	size = sizeof(http_info_str) / sizeof(http_info_str[0]);
 	for (i = 0; i < size; i++) {
-		reti = regcomp(&http_info_matcher[i], http_info_str[i][0], REG_EXTENDED);
+		reti = regcomp(&http_info_matcher[i], http_info_str[i][0], REG_EXTENDED); //needed for capturing groups
 		if (reti) {
 			perror("Could not compile regex\n");
 			exit(1);
@@ -179,7 +179,7 @@ int carryOutAdvancedInfoMatch(char *in,  char *out, const char *regexStrs[][2], 
 				known = TRUE;
 				return known;
 			} else if (i > 1) {
-				//printf("Matched, service seeems [[%s]], to service %s getting more info...\n\n", regexStrs[i][1],in);
+				printf("Matched, service seeems [[%s]], to service %s getting more info...\n\n", regexStrs[i][1],in);
 				strncat(out, regexStrs[i][1], 200 - (strlen(out) +1));
 				known = TRUE;
 				return known;

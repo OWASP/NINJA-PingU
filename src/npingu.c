@@ -58,7 +58,7 @@ void parseIpAddresses(char *in)
 		  printf("\t+Scanning host \t\t\t[%d.%d.%d.%d]\n", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
 		  seed_ip[3]--;
 		  for(i=0; i < 4; i++)
-			  maxIp[i] = seed_ip[i]; 
+			maxIp[i] = seed_ip[i];
 	  }
 	  maxOct=malloc(sizeof(char)*30);
 	  snprintf(maxOct, 199, "%d.%d.%d.%d", maxIp[0], maxIp[1], maxIp[2], maxIp[3]);
@@ -75,8 +75,7 @@ void parsePorts(unsigned int* ports[2], char *in)
 	} else {
 		(*ports)[0] = (unsigned int)atoi(in);
 		printf("\t+Enumerating services at port\t\t[%u]\n", (*ports)[0]);
-	}	
-	
+	}
 }
 
 void printUsage(int args, char *bin)
@@ -227,14 +226,15 @@ int main(int args, char **argv) {
 	//check #args correctness
 	checkArgsLength(args, argv[0]);
 
+	//data initialization
 	char *mIp = NULL;
 	unsigned int sendT = 1;
 	unsigned int recT = 0;
 	unsigned int* ports[2];
 	ports[0] = malloc(sizeof(int));
 	ports[1] = malloc(sizeof(int));
-	(*ports)[0] = (unsigned int)atoi("0");
-	(*ports)[1] = (unsigned int)atoi("0");
+	(*ports)[0] = (unsigned int)0;
+	(*ports)[1] = (unsigned int)0;
 	stats.foundHosts = 0;
 	
 	//parse args
@@ -273,6 +273,15 @@ int main(int args, char **argv) {
 			module = argv[i+1];
 			printf("\t+Module \t\t\t\t[%s]\n", module);
 		}
+	}
+
+	// dynamically load plugin
+	loadMethods();
+	struct plugIn *plIn = onInitPlugin();
+	if (plIn != NULL && (*ports)[0] != 0 && (*ports)[1] != 0)
+	{
+		(*ports)[0] = plIn->ports[0];
+		(*ports)[1] = plIn->ports[1];
 	}
 	if (ports[0] == 0 && ports[1] == 0) {
 		(*ports)[0] = (unsigned int) 1;
@@ -323,8 +332,8 @@ int main(int args, char **argv) {
 	
 	pthread_create(&statsprinter, NULL, *printstats, (void *) &s);
         char *firstIp;
-	        firstIp = (char *) malloc(19 * sizeof(char));
-		        snprintf(firstIp, 199, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
+	firstIp = (char *) malloc(19 * sizeof(char));
+	snprintf(firstIp, 199, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
 
 	//wait for threads creation
 	for (i = 0; i < sendT+6; i++)

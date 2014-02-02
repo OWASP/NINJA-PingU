@@ -100,7 +100,7 @@ const char *http_serv_str[][2] = { {"html", "http"},
 							};
 
 const char *http_info_str[][2] = {
-							{"Server:\\s{0,1}([a-zA-Z0-9./_-]*)", "()"},
+							{"Server: ([^ ]*)", "()"},
 							{"Basic realm=\"([^\"]*)", "()"},
 							{"Mbedthis-AppWeb", "(Mbedthis-AppWeb)"},
 							{"ZyXEL-RomPager", "(ZyXEL-RomPager)"},
