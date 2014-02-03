@@ -74,17 +74,16 @@ struct plugIn *onInitPlugin() {
 
 	printf("Parsing CPE DB, this might take up to 5 mins\n");
 	long long int cpelen = parseCPE(cpefile);
-	printf("found %llu CPE entries\n ", cpelen);
+	printf("+Internalized [%llu] CPE entries\n ", cpelen);
 	free(cpefile);
 
 	//load NVD file
 	char *nvdfile = loadFile(NVD_FILE);
-	printf("Parsing NVD DB, this might take up to 5 mins\n");
 	long long int nvdlen = parseNVD(nvdfile);
-	printf("found %llu NVD entries\n ", nvdlen);
+	printf("+Analyzing [%llu] NVD entries\n ", nvdlen);
 	free(nvdfile);
 
-
+exit(0);
 	return initInput();
 }
 

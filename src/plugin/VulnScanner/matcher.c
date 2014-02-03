@@ -47,24 +47,8 @@ void initRegex() {
 	int size = sizeof(http_info_str) / sizeof(http_info_str[0]);
 	for (i = 0; i < size; i++) {
 		reti = regcomp(&http_info_matcher[i], http_info_str[i][0], REG_EXTENDED);
-		if (reti) { perror("Could not compile regex\n"); exit(1); 
+		if (reti) { perror("Could not compile regex\n"); exit(1); }
 	}
-}
-
-	//compile CPE related regexes
-	reti = regcomp(&title_cpe_matcher, title_cpe_regex, REG_EXTENDED);
-	if (reti) {	perror("Could not compile regex\n"); exit(1); }
-	reti = regcomp(&str_cpe_matcher, str_cpe_regex, REG_EXTENDED);
-	if (reti) {perror("Could not compile regex\n"); exit(1); }
-	
-	//compile NVD related regexes
-	reti = regcomp(&nvd_entry_matcher, nvd_entry_regex, REG_EXTENDED);
-	if (reti) {	perror("Could not compile regex\n"); exit(1); }
-	reti = regcomp(&nvd_cve_matcher, nvd_cve_regex, REG_EXTENDED);
-	if (reti) {perror("Could not compile regex\n"); exit(1); }
-	reti = regcomp(&nvd_cpe_matcher, nvd_cpe_regex, REG_EXTENDED);
-	if (reti) {perror("Could not compile regex\n"); exit(1); }
-
 }
 int carryOutServMatch(char *in, char *out, const char *regexStrs[][2], const regex_t regexM[], int size) {
 	int i = 0, reti;
@@ -117,8 +101,6 @@ unsigned long long int parseCPE(char *in) {
 	unsigned long long int index = 0;
 	unsigned long long int i = 0;
 	unsigned long long int j = 0;
-	int reti;
-	int matchLen;
 	int maxLen = strlen(in);
 	//while file not parsed
 	while (maxLen -i > 5000) {
@@ -127,17 +109,16 @@ unsigned long long int parseCPE(char *in) {
 
 	
 		//finds the next <cpe-item name="cpe:/a:1024cms:1024_cms:1.3.1">
-		while (in[i] != '<' || in[i+1] != 'c' || in[i+5] != 'i' || in[i+10] != 'n' || in[i+15] != '"'){ i++; printf("oooo%llu, %c\n", i, in[i]);}
+		while (in[i] != '<' || in[i+1] != 'c' || in[i+5] != 'i' || in[i+10] != 'n' || in[i+15] != '"'){ i++;}
 		i=i+16;j = i;
 		
 		//looks for the other quotes
-		while (in[i] != '"'){ i++; }
+		while (in[i] != '"'){ i++;}
 		
 		//copies the data
-		curr->title = malloc(sizeof(char *) * i-j);
+		curr->title = malloc(sizeof(char) * (i-j));
 		strncpy(curr->title, in + j, i - j);
 		curr->title[j-i] = 0;
-		printf("title %s\n", curr->title);
 
 		//finds the next title xml:lang="en-US">2Glux Sexy Polling (com_sexypolling) component for Joomla! 0.9.4</title>
 		while (in[i] != '<' || in[i+1] != 't' || in[i+7] != 'x' || in[i+11] != 'l' || in[i+15] != '=' || in[i+17] != 'e'  ){ i++;}
@@ -147,10 +128,10 @@ unsigned long long int parseCPE(char *in) {
 		while (in[i] != '<'){ i++;}
 		
 		//copies the data
-		curr->cpe = malloc(sizeof(char *) * i-j);
+		curr->cpe = malloc(sizeof(char) * (i-j));
 		strncpy(curr->cpe, in + j, i - j);
 		curr->cpe[j-i] = 0;
-		printf("cpe %s\n", curr->cpe);
+	//	printf("cpe %s\n", curr->cpe);
 		i++;
 		index++;
 	}
@@ -162,11 +143,9 @@ unsigned long long int parseNVD(char *in) {
 	unsigned long long int i = 1;
 	unsigned long long int j = 1;
 		
-	int reti;
-	int entryLen, cveLen, cpeLen;
 	int totLen = strlen(in);
 	//while file not parsed
-	while (totLen- i > 500) {
+	while (totLen - i > 3000) {
 		//allocate mem for the struct to hold the key value pair
 		struct NVD_S *curr = malloc(sizeof(char *) * 2);
 
@@ -180,7 +159,7 @@ unsigned long long int parseNVD(char *in) {
 		 i++; j = i;
 		while (in[i] != '"'){ i++; }
 		
-		curr->cve = malloc(sizeof(char *) * i-j);
+		curr->cve = malloc(sizeof(char) * i-j);
 		strncpy(curr->cve, in+j, i-j);
 		curr->cve[j-i] = 0;
 
@@ -189,7 +168,7 @@ unsigned long long int parseNVD(char *in) {
 		 i++;j = i;
 
 		//find </vuln:vulnerable-software-list>
-		while (in[i] != '<' || in[i+1] != '/' || in[i+18] != 's' ) {i++;}
+		while (in[i] != '<' || in[i+1] != '/' || in[i+18] != 's' || in[i+27] != 'l') {i++;}
 
 		curr->vulns = malloc(sizeof(char) * i-j);
 		strncpy(curr->vulns, in+j, i-j);

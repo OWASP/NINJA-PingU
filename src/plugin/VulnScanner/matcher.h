@@ -33,21 +33,6 @@ const char *http_info_str[][2] = {
 				};
 
 
-regex_t title_cpe_matcher;
-regex_t str_cpe_matcher;
-
-const char *title_cpe_regex = "<title xml:lang=\"en-US\">([^<]*)";
-const char *str_cpe_regex = "<cpe-23:cpe23-item name=\"([^\"]*)";
-
-regex_t nvd_entry_matcher;
-regex_t nvd_cve_matcher;
-regex_t nvd_cpe_matcher;
-
-const char *nvd_entry_regex = "<entry([?|</entry>]))";
-const char *nvd_cve_regex = "id=\"([^\"]*)";
-const char *nvd_cpe_regex = "wqdwqdwqdwq";//vuln:vulnerable-software-list>([?|</vuln:vulnerable-software-list>)";
-
-  
 
 size_t maxGroups = 3;
 
