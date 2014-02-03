@@ -23,11 +23,23 @@
 #include "matcher.h"
 #include "../../pers.c"
 
+
+//linked list to allocate cves
+struct List {
+	struct List *next;
+	char *cve;
+};
+
 //Allocate CPE key value pairs
 struct CpeP {
 	char *title;
 	char *cpe;
+	struct List *cve;
+	
 };
+
+long long int nvdlen;
+long long int cpelen;
 
 //Allocate NVD key value pairs
 struct NVD_S {
@@ -105,9 +117,8 @@ unsigned long long int parseCPE(char *in) {
 	//while file not parsed
 	while (maxLen -i > 5000) {
 		//allocate mem for the struct to hold the key value pair
-		struct CpeP *curr = malloc(sizeof(char *) * 2);
+		struct CpeP *curr = malloc(sizeof(struct CpeP *)+100);
 
-	
 		//finds the next <cpe-item name="cpe:/a:1024cms:1024_cms:1.3.1">
 		while (in[i] != '<' || in[i+1] != 'c' || in[i+5] != 'i' || in[i+10] != 'n' || in[i+15] != '"'){ i++;}
 		i=i+16;j = i;
@@ -116,10 +127,11 @@ unsigned long long int parseCPE(char *in) {
 		while (in[i] != '"'){ i++;}
 		
 		//copies the data
-		curr->title = malloc(sizeof(char) * (i-j));
-		strncpy(curr->title, in + j, i - j);
-		curr->title[j-i] = 0;
-
+		curr->cpe = malloc(sizeof(char *) * (i-j));
+		strncpy(curr->cpe, in + j, i - j);
+		curr->cpe[j-i] = 0;
+		//printf("cpe %s\n", curr->cpe);
+	
 		//finds the next title xml:lang="en-US">2Glux Sexy Polling (com_sexypolling) component for Joomla! 0.9.4</title>
 		while (in[i] != '<' || in[i+1] != 't' || in[i+7] != 'x' || in[i+11] != 'l' || in[i+15] != '=' || in[i+17] != 'e'  ){ i++;}
 		i= i + 24; j = i;
@@ -128,10 +140,12 @@ unsigned long long int parseCPE(char *in) {
 		while (in[i] != '<'){ i++;}
 		
 		//copies the data
-		curr->cpe = malloc(sizeof(char) * (i-j));
-		strncpy(curr->cpe, in + j, i - j);
-		curr->cpe[j-i] = 0;
-	//	printf("cpe %s\n", curr->cpe);
+		curr->title = malloc(sizeof(char *) * (i-j));
+		strncpy(curr->title, in + j, i - j);
+		curr->title[j-i] = 0;
+		//printf("title %s ", curr->title);
+
+		*(cpePairs+index) = curr;
 		i++;
 		index++;
 	}
@@ -147,7 +161,7 @@ unsigned long long int parseNVD(char *in) {
 	//while file not parsed
 	while (totLen - i > 3000) {
 		//allocate mem for the struct to hold the key value pair
-		struct NVD_S *curr = malloc(sizeof(char *) * 2);
+		struct NVD_S *curr = malloc(sizeof(struct NVD_S *));
 
 		//find next entry start
 		while (in[i] != '<' || in[i+1] != 'e' || in[i+2] != 'n' || in[i+3] != 't' || in[i+4] != 'r' || in[i+5] != 'y'){ i++; }
@@ -174,6 +188,31 @@ unsigned long long int parseNVD(char *in) {
 		strncpy(curr->vulns, in+j, i-j);
 		curr->vulns[j-i] = 0;
 		//printf("found i %llu j %llu vulns %s\n", i, j, curr->vulns);
+		*(nvdPairs+index) = curr;
+		
+		int k;
+		struct CpeP *cpeCurr = *cpePairs;
+		//for each cpe
+		for (k=0; k < cpelen; k++) {
+			cpeCurr = *(cpePairs+k);
+			
+			if (cpeCurr != NULL && cpeCurr->cpe != NULL)
+				
+				//if the cpe is in the vuln ones of the nvd			
+				if(strstr(curr->vulns, cpeCurr->cpe) != NULL) {
+					
+					//create a new data to hold the cvw
+					struct List *nList = malloc(sizeof(struct List *));
+					nList->cve=malloc(sizeof(char)*strlen(curr->cve));
+					
+					//copy the value
+					strncpy(nList->cve, curr->cve, 0);
+					
+					//add to the list
+					nList->next = cpeCurr->cve;
+					cpeCurr->cve = nList;
+				}
+		}
 		i++;
 		index++;
 	}

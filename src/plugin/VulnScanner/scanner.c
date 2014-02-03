@@ -70,17 +70,38 @@ struct plugIn *onInitPlugin() {
 	char *cpefile = loadFile(CPE_FILE);
 
 	//variable to hold the CPE pairs
-	cpePairs = malloc(sizeof(struct CpeP*) * 990000000); /* allocate memory*/
+	cpePairs = malloc(sizeof(struct CpeP*) * 99000); /* allocate memory*/
 
 	printf("Parsing CPE DB, this might take up to 5 mins\n");
-	long long int cpelen = parseCPE(cpefile);
+	cpelen = parseCPE(cpefile);
 	printf("+Internalized [%llu] CPE entries\n ", cpelen);
 	free(cpefile);
 
 	//load NVD file
 	char *nvdfile = loadFile(NVD_FILE);
-	long long int nvdlen = parseNVD(nvdfile);
+	
+	//variable to hold the NVD data
+	nvdPairs = malloc(sizeof(struct NvdP*)*999);
+	nvdlen = parseNVD(nvdfile);
 	printf("+Analyzing [%llu] NVD entries\n ", nvdlen);
+	
+	
+
+	int k;
+	struct CpeP *cpeCurr = *cpePairs;
+	//for each cpe
+	for (k=0; k < cpelen; k++) {
+		cpeCurr = *(cpePairs+k);
+		//FIXME
+		/*struct List *cvwe = cpeCurr->cve;
+		while (cvwe->next != NULL)  {
+			if (cvwe->cve != NULL) {
+				printf("Found %s\n", cvwe->cve);
+			}
+			cvwe = cvwe->next;
+		}*/
+	}
+	
 	free(nvdfile);
 
 exit(0);

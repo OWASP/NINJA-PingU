@@ -16,26 +16,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define httpServSize 2
 #define httpInfoSize 2
 
-regex_t http_serv_matcher[httpServSize];
 regex_t http_info_matcher[httpInfoSize];
-
-const char *http_serv_str[][2] = {
-				{"html", "http"},
-				{"HTTP", "http"}
-				};
 
 const char *http_info_str[][2] = {
 				{"Server: ([^ ]*)", "()"},
 				{"Basic realm=\"([^\"]*)", "()"},
 				};
 
-
-
 size_t maxGroups = 3;
 
 regmatch_t groupArray[3];
-regmatch_t groupArray2[3];
-
