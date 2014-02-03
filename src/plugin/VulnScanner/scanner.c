@@ -23,13 +23,15 @@
 #include "../../conf.h"
 
 #define CPE_FILE "src/plugin/VulnScanner/official-cpe-dictionary_v2.3.xml"
+#define NVD_FILE "src/plugin/VulnScanner/nvdcve-2.0-modified.xml"
 
-void loadCpeFile() {
+
+char *loadFile(char *file) {
 	FILE *fp;
 	long lSize;
 	char *buffer;
 
-	fp = fopen( CPE_FILE, "rb");
+	fp = fopen( file, "rb");
 	if (!fp)
 		perror("Could Not Read File"), exit(1);
 
@@ -46,18 +48,10 @@ void loadCpeFile() {
 	if (1 != fread(buffer, lSize, 1, fp))
 		fclose (fp), free(buffer), fputs("entire read fails", stderr), exit(1);
 
-	/*  whole text */
-	printf("file loaded\n");
-	cpePairs = malloc(sizeof(struct CpeP*) * 900000000); /* allocate memory*/
-	unsigned long long int *cpes = 0;
-
-	matchTitle(buffer, cpePairs, cpes, strlen(buffer));
-	printf("found %d capes\n ", cpes);
-	free (cpePairs); /* free the memory for the pointer to pointers */
 
 	fclose(fp);
-	free(buffer);
-}
+	return buffer;
+	}
 
 struct plugIn *initInput() {
 	struct plugIn *pn = malloc(sizeof(unsigned int) * 2);
@@ -71,7 +65,26 @@ struct plugIn *onInitPlugin() {
 	initRegex();
 	openServiceFile();
 	openSpecServiceFile();
-	loadCpeFile();
+	
+	//load CPE file
+	char *cpefile = loadFile(CPE_FILE);
+
+	//variable to hold the CPE pairs
+	cpePairs = malloc(sizeof(struct CpeP*) * 990000000); /* allocate memory*/
+
+	printf("Parsing CPE DB, this might take up to 5 mins\n");
+	long long int cpelen = parseCPE(cpefile);
+	printf("found %llu CPE entries\n ", cpelen);
+	free(cpefile);
+
+	//load NVD file
+	char *nvdfile = loadFile(NVD_FILE);
+	printf("Parsing NVD DB, this might take up to 5 mins\n");
+	long long int nvdlen = parseNVD(nvdfile);
+	printf("found %llu NVD entries\n ", nvdlen);
+	free(nvdfile);
+
+
 	return initInput();
 }
 

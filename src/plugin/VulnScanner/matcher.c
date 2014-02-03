@@ -29,7 +29,16 @@ struct CpeP {
 	char *cpe;
 };
 
-// pointer of cpepair pointers
+//Allocate NVD key value pairs
+struct NVD_S {
+	char *cve;
+	char *vulns;
+};
+
+// pointer of NVD pairs pointers
+struct NVD_S **nvdPairs;
+
+// pointer of CPE pairs pointers
 struct CpeP **cpePairs;
 
 void initRegex() {
@@ -37,25 +46,26 @@ void initRegex() {
 	int reti;
 	int size = sizeof(http_info_str) / sizeof(http_info_str[0]);
 	for (i = 0; i < size; i++) {
-		reti = regcomp(&http_info_matcher[i], http_info_str[i][0], REG_EXTENDED); //needed for capturing groups
-		if (reti) {
-			perror("Could not compile regex\n");
-			exit(1);
-		}
-	}
-
-	reti = regcomp(&title_cpe_matcher, title_cpe_regex, REG_EXTENDED); //needed for capturing groups
-	if (reti) {
-		perror("Could not compile regex\n");
-		exit(1);
-	}
-	reti = regcomp(&str_cpe_matcher, str_cpe_regex, REG_EXTENDED); //needed for capturing groups
-	if (reti) {
-		perror("Could not compile regex\n");
-		exit(1);
+		reti = regcomp(&http_info_matcher[i], http_info_str[i][0], REG_EXTENDED);
+		if (reti) { perror("Could not compile regex\n"); exit(1); 
 	}
 }
 
+	//compile CPE related regexes
+	reti = regcomp(&title_cpe_matcher, title_cpe_regex, REG_EXTENDED);
+	if (reti) {	perror("Could not compile regex\n"); exit(1); }
+	reti = regcomp(&str_cpe_matcher, str_cpe_regex, REG_EXTENDED);
+	if (reti) {perror("Could not compile regex\n"); exit(1); }
+	
+	//compile NVD related regexes
+	reti = regcomp(&nvd_entry_matcher, nvd_entry_regex, REG_EXTENDED);
+	if (reti) {	perror("Could not compile regex\n"); exit(1); }
+	reti = regcomp(&nvd_cve_matcher, nvd_cve_regex, REG_EXTENDED);
+	if (reti) {perror("Could not compile regex\n"); exit(1); }
+	reti = regcomp(&nvd_cpe_matcher, nvd_cpe_regex, REG_EXTENDED);
+	if (reti) {perror("Could not compile regex\n"); exit(1); }
+
+}
 int carryOutServMatch(char *in, char *out, const char *regexStrs[][2], const regex_t regexM[], int size) {
 	int i = 0, reti;
 	for (i = 0; i < size; i++) {
@@ -103,53 +113,90 @@ char *match(char *in) {
 	return out;
 }
 
-void matchTitle(char *in, struct CpeP **cpePairs, unsigned long long int *ind, int len) {
-	int reti, i;
-	int known = FALSE;
+unsigned long long int parseCPE(char *in) {
+	unsigned long long int index = 0;
+	unsigned long long int i = 0;
+	unsigned long long int j = 0;
+	int reti;
 	int matchLen;
+	int maxLen = strlen(in);
 	//while file not parsed
-	while (strlen(in) > 100) {
+	while (maxLen -i > 5000) {
 		//allocate mem for the struct to hold the key value pair
 		struct CpeP *curr = malloc(sizeof(char *) * 2);
-		
-		//find the following title
-		reti = regexec(&(title_cpe_matcher), in, maxGroups, groupArray, 0);
-		if (!reti) {
-			//computes length title
-			matchLen = groupArray[1].rm_eo - groupArray[1].rm_so;
-			
-			//allocates mem to store the title
-			curr->title = malloc(sizeof(char *) * matchLen);
-			
-			//stores the title
-			strncpy(curr->title, in + groupArray[1].rm_so, matchLen);
-			curr->title[matchLen] = 0;
-			//printf("title {%s} ", curr->title);
-			
-			//seeks the cpe id
-			reti = regexec(&(str_cpe_matcher), in, maxGroups, groupArray2, 0);
-			if (!reti) {
-				//length of the cpe id
-				matchLen = groupArray2[1].rm_eo - groupArray2[1].rm_so;
-				//allocates mem for holding it
-				curr->cpe = malloc(sizeof(char *) * matchLen);
-				//copies it 
-				strncpy(curr->cpe, in + groupArray2[1].rm_so, matchLen);
-				curr->cpe[matchLen] = 0;
-				//printf("cpe {%s}\n", curr->cpe);
 
-				//increment pointers
-				int t = ind;
-				cpePairs[t] = curr;
-				in = in + groupArray2[1].rm_eo;
-				printf("%d strlen(%d) ind %d", ind, strlen(in), ind);
-				ind++;
-				len = len -i;
-			} else {
-				break;
-			}
-		} else {
-			break;
-		}
+	
+		//finds the next <cpe-item name="cpe:/a:1024cms:1024_cms:1.3.1">
+		while (in[i] != '<' || in[i+1] != 'c' || in[i+5] != 'i' || in[i+10] != 'n' || in[i+15] != '"'){ i++; printf("oooo%llu, %c\n", i, in[i]);}
+		i=i+16;j = i;
+		
+		//looks for the other quotes
+		while (in[i] != '"'){ i++; }
+		
+		//copies the data
+		curr->title = malloc(sizeof(char *) * i-j);
+		strncpy(curr->title, in + j, i - j);
+		curr->title[j-i] = 0;
+		printf("title %s\n", curr->title);
+
+		//finds the next title xml:lang="en-US">2Glux Sexy Polling (com_sexypolling) component for Joomla! 0.9.4</title>
+		while (in[i] != '<' || in[i+1] != 't' || in[i+7] != 'x' || in[i+11] != 'l' || in[i+15] != '=' || in[i+17] != 'e'  ){ i++;}
+		i= i + 24; j = i;
+	
+		//looks for the other quotes
+		while (in[i] != '<'){ i++;}
+		
+		//copies the data
+		curr->cpe = malloc(sizeof(char *) * i-j);
+		strncpy(curr->cpe, in + j, i - j);
+		curr->cpe[j-i] = 0;
+		printf("cpe %s\n", curr->cpe);
+		i++;
+		index++;
 	}
+	return index;
+}
+
+unsigned long long int parseNVD(char *in) {
+	unsigned long long int index = 0;
+	unsigned long long int i = 1;
+	unsigned long long int j = 1;
+		
+	int reti;
+	int entryLen, cveLen, cpeLen;
+	int totLen = strlen(in);
+	//while file not parsed
+	while (totLen- i > 500) {
+		//allocate mem for the struct to hold the key value pair
+		struct NVD_S *curr = malloc(sizeof(char *) * 2);
+
+		//find next entry start
+		while (in[i] != '<' || in[i+1] != 'e' || in[i+2] != 'n' || in[i+3] != 't' || in[i+4] != 'r' || in[i+5] != 'y'){ i++; }
+		
+		//find the open quotes tag for the cve
+		while (in[i] != '"'){ i++; }
+		
+		//the index is in the cve copy the content until quotes
+		 i++; j = i;
+		while (in[i] != '"'){ i++; }
+		
+		curr->cve = malloc(sizeof(char *) * i-j);
+		strncpy(curr->cve, in+j, i-j);
+		curr->cve[j-i] = 0;
+
+		//find <vuln:vulnerable-software-list>
+		while (in[i] != '<' || in[i+1] != 'v'|| in[i+17] != 's' || in[i+26] != 'l' ){ i++;}
+		 i++;j = i;
+
+		//find </vuln:vulnerable-software-list>
+		while (in[i] != '<' || in[i+1] != '/' || in[i+18] != 's' ) {i++;}
+
+		curr->vulns = malloc(sizeof(char) * i-j);
+		strncpy(curr->vulns, in+j, i-j);
+		curr->vulns[j-i] = 0;
+		//printf("found i %llu j %llu vulns %s\n", i, j, curr->vulns);
+		i++;
+		index++;
+	}
+	return index;
 }
