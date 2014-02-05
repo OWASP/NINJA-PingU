@@ -191,9 +191,15 @@ char *getMeALocalAddr()
 	} else if (moreThanOneWIF == FALSE && lan == NULL && wlan != NULL) {
 		return wlan;
 	} else {
+		if (moreThanOneIF == TRUE) {
+			return lan;
+		} else if (moreThanOneWIF == TRUE) {
+			return wlan;
+		} else {
 		printf("I found several potential local interfaces to use, please write the local ip to use:\n");
 		scanf("%s", lan);
 		return lan;
+		}
 	}
 }
 
