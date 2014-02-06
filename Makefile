@@ -5,7 +5,7 @@ PLIB=$(PSOURCE:.c=.so)
 CC=gcc
 CFLAGS=-Wall -O3 -fstack-protector-all -Wwrite-strings -Wunreachable-code -Wpointer-arith  -Wcast-qual -falign-functions=4 -falign-jumps -Wint-to-pointer-cast -Wno-pointer-to-int-cast
 LDFLAGS=-fPIC -ldl -lpthread
-CPFLAGS=-O3 -fstack-protector-all -falign-jumps
+CPFLAGS=-O3 -Wall -fstack-protector-all -falign-jumps
 SYFLAGS= -pedantic -Wall -std=c99 -fpic -I.
 SFLAGS=-shared
 PLUGSRC=src/plugin

@@ -16,15 +16,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define httpInfoSize 2
+#include "../../conf.h"
 
-regex_t http_info_matcher[httpInfoSize];
 
-const char *http_info_str[][2] = {
-				{"Server: ([^ ]*)", "()"},
-				{"Basic realm=\"([^\"]*)", "()"},
-				};
+#define CPE_FILE "src/plugin/VulnScanner/official-cpe-dictionary_v2.3.xml"
+#define NVD_FILE "src/plugin/VulnScanner/nvdcve-2.0-modified.xml"
 
-size_t maxGroups = 3;
 
-regmatch_t groupArray[3];
+//linked list to allocate cves
+struct List {
+	struct List *next;
+	char *cve;
+};
+
+//Allocate CPE key value pairs
+struct CPE_DATA {
+	char *title;
+	char *cpe;
+	struct List *cve;
+};
+
+long long int nvdlen;
+long long int cpelen;
+
+//Allocate NVD key value pairs
+struct NVD_DATA {
+	char *cve;
+	char *vulns;
+};
+
+// pointer of NVD pairs pointers
+struct NVD_DATA **nvdPairs;
+
+// pointer of CPE pairs pointers
+struct CPE_DATA **cpePairs;

@@ -278,12 +278,12 @@ int main(int args, char **argv) {
 	// dynamically load plugin
 	loadMethods();
 	struct plugIn *plIn = onInitPlugin();
-	if (plIn != NULL && (*ports)[0] != 0 && (*ports)[1] != 0)
+	if (plIn != NULL && (*ports)[0] == 0 && (*ports)[1] == 0)
 	{
 		(*ports)[0] = plIn->ports[0];
 		(*ports)[1] = plIn->ports[1];
 	}
-	if (ports[0] == 0 && ports[1] == 0) {
+	if (ports[0] == 0) {
 		(*ports)[0] = (unsigned int) 1;
 		(*ports)[1] = (unsigned int) 100;
 						
@@ -292,6 +292,11 @@ int main(int args, char **argv) {
 	{
 		mIp = getMeALocalAddr();
 		printf("\t+Local IP \t\t\t\t[%s]\n", mIp);
+	}
+	if ((*ports)[1] == 0) {
+		printf("\t+Targetting Port \t\t\t\t[%d]\n", (*ports)[0]);
+	} else {
+		printf("\t+Targetting Port Range \t\t\t[%d-%d]\n", (*ports)[0], (*ports)[1]);
 	}
 	printf("##################################################################\n");
 	

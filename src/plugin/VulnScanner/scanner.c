@@ -20,18 +20,31 @@
 #include <stdlib.h>
 
 #include "matcher.c"
-#include "../../conf.h"
 
-#define CPE_FILE "src/plugin/VulnScanner/official-cpe-dictionary_v2.3.xml"
-#define NVD_FILE "src/plugin/VulnScanner/nvdcve-2.0-modified.xml"
-
-
+void traverseCPE() {
+	unsigned int k;
+	struct List *cvwe;
+	for (k = 5000; k < cpelen; k++) {
+		cvwe = cpePairs[k]->cve;
+		printf("cpe[%s] title[%s]\n", cpePairs[k]->cpe, cpePairs[k]->title);
+		while (cvwe != NULL && cvwe->next != NULL) {
+			printf("in the inner looop\n");
+			if (cvwe->cve != NULL && strlen(cvwe->cve) > 6) {
+				printf("Found %s\n", cvwe->cve);
+			}
+			if (cvwe == NULL || cvwe->next == NULL) {
+				break;
+			}
+			cvwe = cvwe->next;
+		}
+	}
+}
 char *loadFile(char *file) {
 	FILE *fp;
 	long lSize;
 	char *buffer;
 
-	fp = fopen( file, "rb");
+	fp = fopen(file, "rb");
 	if (!fp)
 		perror("Could Not Read File"), exit(1);
 
@@ -48,10 +61,9 @@ char *loadFile(char *file) {
 	if (1 != fread(buffer, lSize, 1, fp))
 		fclose (fp), free(buffer), fputs("entire read fails", stderr), exit(1);
 
-
 	fclose(fp);
 	return buffer;
-	}
+}
 
 struct plugIn *initInput() {
 	struct plugIn *pn = malloc(sizeof(unsigned int) * 2);
@@ -62,49 +74,30 @@ struct plugIn *initInput() {
 
 struct plugIn *onInitPlugin() {
 	//struct plugIn *pugIn = initInput();
-	initRegex();
 	openServiceFile();
 	openSpecServiceFile();
-	
+
 	//load CPE file
 	char *cpefile = loadFile(CPE_FILE);
 
 	//variable to hold the CPE pairs
-	cpePairs = malloc(sizeof(struct CpeP*) * 99000); /* allocate memory*/
+	cpePairs = malloc(sizeof(struct CPE_DATA *));
 
-	printf("Parsing CPE DB, this might take up to 5 mins\n");
 	cpelen = parseCPE(cpefile);
-	printf("+Internalized [%llu] CPE entries\n ", cpelen);
+	printf("\t+Internalized CPE Entries\t\t[%llu]\n ", cpelen);
 	free(cpefile);
 
 	//load NVD file
 	char *nvdfile = loadFile(NVD_FILE);
-	
+
 	//variable to hold the NVD data
-	nvdPairs = malloc(sizeof(struct NvdP*)*999);
+	nvdPairs = malloc(sizeof(struct NVD_S *));
+
 	nvdlen = parseNVD(nvdfile);
-	printf("+Analyzing [%llu] NVD entries\n ", nvdlen);
-	
-	
+	printf("\r\t+Merged NVD Entries\t\t[%llu]\n ", nvdlen);
 
-	int k;
-	struct CpeP *cpeCurr = *cpePairs;
 	//for each cpe
-	for (k=0; k < cpelen; k++) {
-		cpeCurr = *(cpePairs+k);
-		//FIXME
-		/*struct List *cvwe = cpeCurr->cve;
-		while (cvwe->next != NULL)  {
-			if (cvwe->cve != NULL) {
-				printf("Found %s\n", cvwe->cve);
-			}
-			cvwe = cvwe->next;
-		}*/
-	}
-	
-	free(nvdfile);
-
-exit(0);
+	void traverseCPE();
 	return initInput();
 }
 
@@ -126,12 +119,15 @@ void provideOutput(char *host, int port, char *msg) {
 		return;
 	}
 	//get server banner
-	char *serv = match(msg);
+	char *serv = matchService(msg);
+	if (serv == NULL) {
+		return;
+	}
 	persistServ(host, port, serv);
 	printf("Analyzing [%s]\n", serv);
 	//get cpe
 	char *cpebanner = getCPE(serv);
-	printf("Found CPE [%s] corresponding to [%s]\n", cpebanner, serv);
+//	printf("Found CPE [%s] corresponding to [%s]\n", cpebanner, serv);
 
 	if (serv != NULL) {
 		free(serv);

@@ -139,8 +139,8 @@ int *start_connector(void *agentI) {
 							data = data + datacount;
 						}
 						if (data > 0) {
-							persistAck(hostInfo.ip,hostInfo.port,msg);
 							provideOutput(hostInfo.ip, hostInfo.port, msg);
+							persistAck(hostInfo.ip,hostInfo.port,msg);
 						}
 						if (msg!= NULL) {
 							free(msg);

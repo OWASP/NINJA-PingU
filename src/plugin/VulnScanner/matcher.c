@@ -24,101 +24,36 @@
 #include "../../pers.c"
 
 
-//linked list to allocate cves
-struct List {
-	struct List *next;
-	char *cve;
-};
-
-//Allocate CPE key value pairs
-struct CpeP {
-	char *title;
-	char *cpe;
-	struct List *cve;
-	
-};
-
-long long int nvdlen;
-long long int cpelen;
-
-//Allocate NVD key value pairs
-struct NVD_S {
-	char *cve;
-	char *vulns;
-};
-
-// pointer of NVD pairs pointers
-struct NVD_S **nvdPairs;
-
-// pointer of CPE pairs pointers
-struct CpeP **cpePairs;
-
-void initRegex() {
-	int i = 0;
-	int reti;
-	int size = sizeof(http_info_str) / sizeof(http_info_str[0]);
-	for (i = 0; i < size; i++) {
-		reti = regcomp(&http_info_matcher[i], http_info_str[i][0], REG_EXTENDED);
-		if (reti) { perror("Could not compile regex\n"); exit(1); }
-	}
-}
-int carryOutServMatch(char *in, char *out, const char *regexStrs[][2], const regex_t regexM[], int size) {
-	int i = 0, reti;
-	for (i = 0; i < size; i++) {
-		reti = regexec(&(regexM[i]), in, 0, NULL, 0);
-		if (!reti) {
-			//printf("Matched, service seeems [[%s]], to service %s getting more info...\n\n", regexStrs[i][1],in);
-			strncpy(out, regexStrs[i][1], 200);
-		}
-	}
-	return 1;
-}
-
-int carryOutAdvancedInfoMatch(char *in, char *out, const char *regexStrs[][2], const regex_t regexM[], int size) {
-	int i = 0, reti;
-	int known = FALSE;
-	for (i = 0; i < size; i++) {
-		reti = regexec(&(regexM[i]), in, maxGroups, groupArray, 0);
-		if (!reti) {
-			if (i < 2 && groupArray[1].rm_so != (size_t) - 1 && groupArray[1].rm_eo - groupArray[1].rm_so > 4) {
-				char sourceCopy[strlen(in) + 1];
-				strncpy(sourceCopy, in, strlen(in) + 1);
-				sourceCopy[groupArray[1].rm_eo] = 0;
-				strncat(out, sourceCopy + groupArray[1].rm_so, 50);
-				known = TRUE;
-				return known;
-			} else if (i > 1) {
-				printf("Matched, service seeems [[%s]], to service %s getting more info...\n\n", regexStrs[i][1], in);
-				strncat(out, regexStrs[i][1], 200 - (strlen(out) + 1));
-				known = TRUE;
-				return known;
-			}
-		}
-	}
-	return known;
-}
-
 char *matchService(char *in) {
-	char *out = malloc(sizeof(char) * 200);
-	carryOutAdvancedInfoMatch(in, out, http_info_str, http_info_matcher, httpInfoSize);
-	return out;
-}
-
-char *match(char *in) {
-	char *out = matchService(in);
+	char *out = NULL;
+	int totLen = strlen(in);
+	int i = 0;
+	while ( (i+6) < totLen && (in[i] != 'S' || in[i+1] != 'e'  || in[i+2] != 'r'  || in[i+3] != 'v'  || in[i+4] != 'e'  || in[i+5] != 'r' || in[i+6] != ':')) {
+		i++;
+	}
+	if (i < totLen) {
+		i = i+8;
+		int j = i;
+		while(in[i] != 10 && in[i] != '\r' && i < totLen) {
+			i++;
+		}
+		out = malloc(sizeof(char *) * (i-j));
+		strncpy(out, in+j, i-j);
+		out[i-j]=0;
+	}
 	return out;
 }
 
 unsigned long long int parseCPE(char *in) {
-	unsigned long long int index = 0;
-	unsigned long long int i = 0;
-	unsigned long long int j = 0;
+	unsigned int index = 0;
+	unsigned int i = 0;
+	unsigned int j = 0;
 	int maxLen = strlen(in);
 	//while file not parsed
-	while (maxLen -i > 5000) {
+	while (maxLen -i > 1000) {
 		//allocate mem for the struct to hold the key value pair
-		struct CpeP *curr = malloc(sizeof(struct CpeP *)+100);
-
+		cpePairs[index]=malloc(sizeof(struct CPE_DATA *));
+		
 		//finds the next <cpe-item name="cpe:/a:1024cms:1024_cms:1.3.1">
 		while (in[i] != '<' || in[i+1] != 'c' || in[i+5] != 'i' || in[i+10] != 'n' || in[i+15] != '"'){ i++;}
 		i=i+16;j = i;
@@ -127,42 +62,39 @@ unsigned long long int parseCPE(char *in) {
 		while (in[i] != '"'){ i++;}
 		
 		//copies the data
-		curr->cpe = malloc(sizeof(char *) * (i-j));
-		strncpy(curr->cpe, in + j, i - j);
-		curr->cpe[j-i] = 0;
-		//printf("cpe %s\n", curr->cpe);
-	
+		cpePairs[index]->cpe = malloc(sizeof(char *) * (i-j)+1);
+		strncpy(cpePairs[index]->cpe, in + j, i - j);
+		cpePairs[index]->cpe[i-j] = '\0';
+		
 		//finds the next title xml:lang="en-US">2Glux Sexy Polling (com_sexypolling) component for Joomla! 0.9.4</title>
 		while (in[i] != '<' || in[i+1] != 't' || in[i+7] != 'x' || in[i+11] != 'l' || in[i+15] != '=' || in[i+17] != 'e'  ){ i++;}
 		i= i + 24; j = i;
-	
+		
 		//looks for the other quotes
 		while (in[i] != '<'){ i++;}
 		
 		//copies the data
-		curr->title = malloc(sizeof(char *) * (i-j));
-		strncpy(curr->title, in + j, i - j);
-		curr->title[j-i] = 0;
-		//printf("title %s ", curr->title);
-
-		*(cpePairs+index) = curr;
-		i++;
+		cpePairs[index]->title = malloc(sizeof(char *) * (i-j)+1);
+		strncpy(cpePairs[index]->title, in + j, i - j);
+		cpePairs[index]->title[i-j] = '\0';
+		//printf("i[%d] cpe [%s] title {%s} \n", index, cpePairs[index]->cpe, cpePairs[index]->title);
+		
 		index++;
 	}
 	return index;
 }
 
 unsigned long long int parseNVD(char *in) {
-	unsigned long long int index = 0;
-	unsigned long long int i = 1;
-	unsigned long long int j = 1;
-		
+	unsigned int index = 0;
+	unsigned int i = 0;
+	unsigned int j = 0;
 	int totLen = strlen(in);
+
 	//while file not parsed
 	while (totLen - i > 3000) {
 		//allocate mem for the struct to hold the key value pair
-		struct NVD_S *curr = malloc(sizeof(struct NVD_S *));
-
+		nvdPairs[index] = malloc(sizeof(struct NVD_DATA *));
+		
 		//find next entry start
 		while (in[i] != '<' || in[i+1] != 'e' || in[i+2] != 'n' || in[i+3] != 't' || in[i+4] != 'r' || in[i+5] != 'y'){ i++; }
 		
@@ -170,47 +102,47 @@ unsigned long long int parseNVD(char *in) {
 		while (in[i] != '"'){ i++; }
 		
 		//the index is in the cve copy the content until quotes
-		 i++; j = i;
+		i++; j = i;
 		while (in[i] != '"'){ i++; }
 		
-		curr->cve = malloc(sizeof(char) * i-j);
-		strncpy(curr->cve, in+j, i-j);
-		curr->cve[j-i] = 0;
-
+		nvdPairs[index]->cve = malloc(sizeof(char *) * (i-j)+1);
+		strncpy(nvdPairs[index]->cve, in+j, i-j);
+		nvdPairs[index]->cve[i-j] = '\0';
+		
 		//find <vuln:vulnerable-software-list>
 		while (in[i] != '<' || in[i+1] != 'v'|| in[i+17] != 's' || in[i+26] != 'l' ){ i++;}
 		 i++;j = i;
-
+		
 		//find </vuln:vulnerable-software-list>
 		while (in[i] != '<' || in[i+1] != '/' || in[i+18] != 's' || in[i+27] != 'l') {i++;}
-
-		curr->vulns = malloc(sizeof(char) * i-j);
-		strncpy(curr->vulns, in+j, i-j);
-		curr->vulns[j-i] = 0;
-		//printf("found i %llu j %llu vulns %s\n", i, j, curr->vulns);
-		*(nvdPairs+index) = curr;
 		
-		int k;
-		struct CpeP *cpeCurr = *cpePairs;
+		nvdPairs[index]->vulns = malloc(sizeof(char *) * ( i-j)+1);
+		strncpy(nvdPairs[index]->vulns, in+j, i-j);
+		nvdPairs[index]->vulns[i-j] = '\0';
+		//printf("found i [%llu] j [%llu] vulns [%s]\n", i, j, nvdPairs[index]->vulns);
+		
+		unsigned int k;
 		//for each cpe
 		for (k=0; k < cpelen; k++) {
-			cpeCurr = *(cpePairs+k);
+			//printf("cpe[%s] title[%s]\n", cpePairs[k]->cpe, cpePairs[k]->title);
 			
-			if (cpeCurr != NULL && cpeCurr->cpe != NULL)
-				
-				//if the cpe is in the vuln ones of the nvd			
-				if(strstr(curr->vulns, cpeCurr->cpe) != NULL) {
-					
+			if (cpePairs[k] != NULL && cpePairs[k]->cpe != NULL && strlen(cpePairs[k]->cpe) > 6)				
+				//if the cpe is in the vuln ones of the nvd
+				if(strstr(nvdPairs[index]->vulns, cpePairs[k]->cpe) != NULL) {
+				 //printf("Matched[%s] [%s]\n", cpePairs[k]->cpe, cpePairs[k]->title);
 					//create a new data to hold the cvw
 					struct List *nList = malloc(sizeof(struct List *));
-					nList->cve=malloc(sizeof(char)*strlen(curr->cve));
+					nList->cve=malloc(sizeof(char)*strlen(nvdPairs[index]->cve));
 					
 					//copy the value
-					strncpy(nList->cve, curr->cve, 0);
+					strncpy(nList->cve, nvdPairs[index]->cve, strlen(nvdPairs[index]->cve));
+					nList->cve[strlen(nvdPairs[index]->cve)]='\0';
+					//printf("Copied %s\n", nList->cve);
 					
 					//add to the list
-					nList->next = cpeCurr->cve;
-					cpeCurr->cve = nList;
+					nList->next= malloc(sizeof(struct List *)+sizeof(char)*30);
+					nList->next = cpePairs[k]->cve;
+					cpePairs[k]->cve = nList;
 				}
 		}
 		i++;

@@ -52,27 +52,6 @@ unsigned int seed_ip[4] = {80,58,0,0};
 int maxIp[4] = {224,0,0,0};
 char *maxOct;
 
-char *getUS()
-{ //100.128.0.0-100.255.255.255
-	pthread_mutex_lock(&mutex);
-	char *str;
-	str = (char *) malloc(19 * sizeof(char));
-	if(seed_ip[0] >= 100 && seed_ip[1] >= 129 && seed_ip[2] >= 0 && seed_ip[3] > 0 ) {
-		return NULL;
-	} else if (seed_ip[3] < 254) {
-		seed_ip[3]++;
-	} else if (seed_ip[2] < 254) {
-		seed_ip[2]++;
-	} else if (seed_ip[1] < 254) {
-		seed_ip[1]++;
-	} else if (seed_ip[0] < 254) {
-		seed_ip[0]++;
-	}
-	snprintf(str, 199, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
-	pthread_mutex_unlock(&mutex);
-	return str;
-
-}
 char *getNext()
 {
 	char *str;
