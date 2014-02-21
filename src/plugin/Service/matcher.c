@@ -189,6 +189,63 @@ int carryOutAdvancedInfoMatch(char *in,  char *out, const char *regexStrs[][2], 
 	return known;
 }
 
+char **tokenize(char *in) {
+	char **out = (char**) calloc(50, sizeof(char*));
+	unsigned int i=4, j=0, k=0, l;
+	l = strlen(in);
+	while (i < l) {
+		//go to the next separator token
+		while (i < l && in[i] != tokens[6] && in[i] != tokens[7] && in[i] != tokens[0] && in[i] != tokens[1]
+		       && in[i] != tokens[2] && in[i] != tokens[3]&& in[i] != tokens[4] && in[i] != tokens[5]) {i++;}
+		if (i-j > 1) {
+			//copy mem
+			out[k] = (char*) calloc(i-j+1, sizeof(char));
+			memcpy(out[k], &in[j], i-j);
+			char *curr = out[k];
+			curr[i-j] = '\0';
+		}
+		//inc indexed
+		j = i + 1;
+		k++;
+		i++;
+	}
+	//test
+	for (i = 0; i < k; i++) {
+		//printf("[%s] ", out[i]);
+	}
+	//printf("\n");
+}
+
+char *matchBanner(char *in) {
+	char *out = NULL;
+	int totLen = strlen(in);
+	int i = 0, j = 0;
+	//matches Server:
+	while ((i + 6) < totLen && (in[i] != 'S' || in[i + 1] != 'e' || in[i + 2] != 'r' || in[i + 3] != 'v' || in[i + 4] != 'e' || in[i + 5] != 'r' || in[i + 6] != ':')) {i++;}
+	i += 8;
+	if (i < totLen) {
+		j = i;
+		//matches new line
+		while (in[i] != 10 && in[i] != '\r' && i < totLen) {i++;}
+		out = malloc(sizeof(char *) * ((i - j) + 1));
+		strncpy(out, in + j, i - j);
+		out[i - j] = '\0';
+	}else {
+		i=0;
+		//matches Basic realm=\"
+		while ((i + 6) < totLen && (in[i] != 'r' || in[i + 1] != 'e' || in[i + 2] != 'a' || in[i + 3] != 'l' || in[i + 4] != 'm' || in[i + 5] != '=' || in[i + 6] != '"')) {i++;}
+		j=i+7;
+		i+=8;
+		//matches the double quote
+		while (i<totLen && in[i] != '"'){i++;} 
+		if (i < totLen) {
+			out = (char*) calloc(i-j+1, sizeof(char));
+			memcpy(out, &in[j], i-j);
+			out[i-j] = '\0';
+		}
+	}
+	return out;
+}
 
 char *matchService(char *in)
 {

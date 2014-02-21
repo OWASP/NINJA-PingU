@@ -36,6 +36,9 @@
 
 #define osSize 7
 
+char tokens[8] = {' ', '/', '-', '_', '(', ')', ':','*'};
+
+
 regex_t cam_serv_matcher[camServSize];
 const char *cam_serv_str[][2] = { {"MOBOTIX", "IPCamera (MOBOTIX)"},
 								  {"<title>Spectra", "IPCamera (Spectra)"},

@@ -110,7 +110,6 @@ void persistClosedSyn(char *ip, int port) {
 
 
 void persistAck(char *ip, int port, char *msg) {
-	deblank(msg);
 	fprintf(ackF, "{host{%s} port{%d} sent {%s}}\n", ip, port, msg);
 }
 

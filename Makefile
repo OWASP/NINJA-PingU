@@ -7,6 +7,8 @@
 	gcc -o src/plugin/Service/scanner.so src/plugin/Service/scanner.o -shared
 	gcc -c src/plugin/Simple/scanner.c -o src/plugin/Simple/scanner.o -pedantic -Wall -std=c99 -fpic -I.
 	gcc -o src/plugin/Simple/scanner.so src/plugin/Simple/scanner.o -shared
+	gcc -c src/plugin/CiscoUI/scanner.c -o src/plugin/CiscoUI/scanner.o -pedantic -Wall -std=c99 -fpic -I.
+	gcc -o src/plugin/CiscoUI/scanner.so src/plugin/CiscoUI/scanner.o -shared
 	gcc -O3 -ldl -Wall -Wwrite-strings -Wunreachable-code -Wpointer-arith  -Wcast-qual -falign-functions=4 -falign-jumps -Wint-to-pointer-cast -Wno-pointer-to-int-cast -lpthread -o bin/npingu src/npingu.c
 
  profile:
