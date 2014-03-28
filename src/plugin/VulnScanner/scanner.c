@@ -24,9 +24,9 @@
 void traverseCPE() {
 	unsigned int k;
 	struct List *cvwe;
-	for (k = 5000; k < cpelen; k++) {
+	for (k = 6000; k < cpelen; k++) {
 		cvwe = cpePairs[k]->cve;
-		printf("cpe[%s] title[%s]\n", cpePairs[k]->cpe, cpePairs[k]->title);
+		//printf("cpe[%s] title[%s]\n", cpePairs[k]->cpe, cpePairs[k]->title);
 		while (cvwe != NULL && cvwe->next != NULL) {
 			printf("in the inner looop\n");
 			if (cvwe->cve != NULL && strlen(cvwe->cve) > 6) {
@@ -84,7 +84,7 @@ struct plugIn *onInitPlugin() {
 	cpePairs = malloc(sizeof(struct CPE_DATA *));
 
 	cpelen = parseCPE(cpefile);
-	printf("\t+Internalized CPE Entries\t\t[%llu]\n ", cpelen);
+	printf("\t+Internalized CPE Entries\t\t[%u]\n ", cpelen);
 	free(cpefile);
 
 	//load NVD file
@@ -110,9 +110,6 @@ void getServiceInput(int port, char *msg) {
 	strncpy(msg, "GET / HTTP/1.0\r\nConnection: close\r\n\r\n", 80);
 }
 
-char *getCPE() {
-	return "";
-}
 
 void provideOutput(char *host, int port, char *msg) {
 	if (synOnly == TRUE) {
@@ -120,16 +117,36 @@ void provideOutput(char *host, int port, char *msg) {
 	}
 	//get server banner
 	char *serv = matchService(msg);
-	if (serv == NULL) {
+	if (serv == NULL || strlen(serv) < 4) {
 		return;
 	}
 	persistServ(host, port, serv);
-	printf("Analyzing [%s]\n", serv);
+	//printf("Analyzing [%s]\n", serv);
+	char **serv_parsed = tokenize(serv);
+	//printf("Token [%s]\n", serv);
 	//get cpe
-	char *cpebanner = getCPE(serv);
-//	printf("Found CPE [%s] corresponding to [%s]\n", cpebanner, serv);
-
+	struct CPE_DATA **banners = getCPE(serv_parsed);
+//	printf("Found CPE [%s] corresponding to [%s]\n", banner->cpe, serv);
+	int l = 0;
+	while(banners[l] != NULL && banners[l]->cpe != NULL) {
+		struct List *nList = banners[l]->cve;
+		persistSpecialServ(serv, port, banners[l]->cpe);
+		while (nList != NULL && nList->cve != NULL) {
+				persistSpecialServ("", 0, nList->cve);
+				nList = nList->next;
+			}
+		
+		free(banners[l]);
+		l++;
+	}
+	if(banners != NULL) {
+		free(banners);
+	}
 	if (serv != NULL) {
 		free(serv);
 	}
+
+
+
+	
 }

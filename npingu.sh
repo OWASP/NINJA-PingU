@@ -24,7 +24,7 @@ function compile_pingu {
 }
 
 function run_npingu {
-	tmux new-session -d 'echo -e "\e[34mHosts Found\n";tail -F out/hostsScanned.out' \; split-window -d -p 30 \; attach \; split-window -h -p 85 'echo -e "\e[32m\e[107mServices Found\n"; tail -F out/servicesScanned.out' \; split-window -h 'tail -F out/debug.out' \; select-pane -t 3 \; split-window -h -p 40 'echo -e "\e[91mEmbedded Devices Found\n";tail -F out/specialServicesScanned.out' \;  select-pane -t 3 \; attach \; send-keys -t "3" C-z './bin/npingu' Enter;
+	tmux new-session -d 'echo -e "\e[34mHosts Found\n";tail -F out/hostsScanned.out' \; split-window -d -p 30 \; attach \; split-window -h -p 85 'echo -e "\e[32m\e[107mServices Found\n"; tail -F out/servicesScanned.out' \; split-window -h 'tail -F out/debug.out' \; select-pane -t 3 \; split-window -h -p 45 'echo -e "\e[91mEmbedded Devices Found\n";tail -F out/specialServicesScanned.out' \;  select-pane -t 3 \; attach \; send-keys -t "3" C-z './bin/npingu' Enter;
 }
 
 function show_header {

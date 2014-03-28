@@ -22,7 +22,8 @@
 #define CPE_FILE "src/plugin/VulnScanner/official-cpe-dictionary_v2.3.xml"
 #define NVD_FILE "src/plugin/VulnScanner/nvdcve-2.0-modified.xml"
 
-
+int tok = 8;
+char tokens[8] = {' ', '/', '-', '_', '(', ')', ':','*'};
 //linked list to allocate cves
 struct List {
 	struct List *next;
@@ -31,13 +32,11 @@ struct List {
 
 //Allocate CPE key value pairs
 struct CPE_DATA {
-	char *title;
+	char **title;
 	char *cpe;
 	struct List *cve;
 };
 
-long long int nvdlen;
-long long int cpelen;
 
 //Allocate NVD key value pairs
 struct NVD_DATA {
@@ -47,6 +46,8 @@ struct NVD_DATA {
 
 // pointer of NVD pairs pointers
 struct NVD_DATA **nvdPairs;
+long long int nvdlen;
 
 // pointer of CPE pairs pointers
 struct CPE_DATA **cpePairs;
+unsigned int cpelen;

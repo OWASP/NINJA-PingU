@@ -91,7 +91,8 @@ void printUsage(int args, char *bin)
 			"\tIp address seed (i.e. 192.168.01).\n"
 			"Examples\n========\n\n %s -t 5 -p 80 -s 74.125.0.0-74.125.255.255 #SYN scan Google Servers\n\n"
 			" %s -t 3 -p 20-80 188.160.0.0-200.0.0.0 -d 1 -m Service #Service Discoverage Plugin\n\n"
-			" %s -t 2 1.1.1.1-255.1.1.1 -m Backdoor32764 -p 32764 #32764/TCP Backdoor Plugin\n\n", bin, bin, bin, bin);
+			" %s -t 2 1.1.1.1-255.1.1.1 -m Backdoor32764 -p 32764 #32764/TCP Backdoor Plugin\n\n"
+			" %s -t 1 200.10.1.1-220.0.0.0 -m VulnScanner -d 1400\n\n", bin, bin, bin, bin, bin);
 	exit(0);
 }
 
