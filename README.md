@@ -2,7 +2,11 @@ NINJA PingU
 ===========
 NINJA-PingU Is Not Just a Ping Utility is a free open-source high performance network scanner tool for large scale analyses. It has been designed with performance as its primary goal and developed as a framework to allow easy plugin creation.
 
-It comes out of the box with a set of plugins for services analysis and embedded devices identification. More information about those can be found in its home page at http://owasp.github.io/NINJA-PingU
+![OWASP NINJA PingU](https://raw.githubusercontent.com/OWASP/NINJA-PingU/gh-pages/images/ninjapingu_small.png)
+
+NINJA PingU comes out of the box with a set of plugins for services analysis and embedded devices identification. More information about those can be found in its home page at http://owasp.github.io/NINJA-PingU
+
+
 
 
 Requirements
@@ -20,7 +24,7 @@ Usage
 -----
        # sudo ./bin/npingu [OPTIONS] targets
 
-      -t	Number of sender threads.
+      -t    Number of sender threads.
       -p	Port scan range. For instance, 80 or 20-80.
       -d	Delay between packages sent (in usecs).
       -s	No service identification (less bandwith load, more hosts/time).
