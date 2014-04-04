@@ -18,7 +18,7 @@ Requirements
 
 Setting Up NINJA PingU
 ---------------------
-       $git clone https://github.com/OWASP/NINJA-PingU.git; cd ninjaPingu; ./npingu.sh
+       $ cd /tmp; wget https://github.com/OWASP/NINJA-PingU/archive/v1.0.tar.gz; tar -xvf v1.0.tar.gz; cd NINJA-PingU-1.0/; ./npingu.sh
 
 Usage
 -----
