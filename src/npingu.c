@@ -197,7 +197,9 @@ char *getMeALocalAddr()
 			return wlan;
 		} else {
 		printf("I found several potential local interfaces to use, please write the local ip to use:\n");
-		scanf("%s", lan);
+		if (scanf("%s", lan)  < 0 ) {
+			exit(1);
+		}
 		return lan;
 		}
 	}
@@ -325,9 +327,8 @@ int main(int args, char **argv) {
 	
 	pthread_create(&statsprinter, NULL, *printstats, (void *) &s);
         char *firstIp;
-	        firstIp = (char *) malloc(19 * sizeof(char));
-		        snprintf(firstIp, 199, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
-
+        firstIp = (char *) malloc(13);
+        snprintf(firstIp, 13, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
 	//wait for threads creation
 	for (i = 0; i < sendT+6; i++)
 		sem_post(&s);
