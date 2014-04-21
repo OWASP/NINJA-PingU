@@ -103,7 +103,7 @@ char *getNext()
 	} else {
 		return NULL;
 	}
-	snprintf(str, 199, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
+	snprintf(str, 19, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
 	
 		return str;
 	
@@ -141,7 +141,7 @@ void getNext2(char *str)
 	} else {
 		str= NULL;
 	}
-	snprintf(str, 52, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
+	snprintf(str, 19, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
 	if (strcmp(str, maxOct) == 0) {
 		str = NULL;
 		endOfScan = TRUE;

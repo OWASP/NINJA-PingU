@@ -294,11 +294,6 @@ int main(int args, char **argv) {
 		mIp = getMeALocalAddr();
 		printf("\t+Local IP \t\t\t\t[%s]\n", mIp);
 	}
-	if ((*ports)[1] == 0) {
-		printf("\t+Targetting Port \t\t\t\t[%d]\n", (*ports)[0]);
-	} else {
-		printf("\t+Targetting Port Range \t\t\t[%d-%d]\n", (*ports)[0], (*ports)[1]);
-	}
 	printf("##################################################################\n");
 	
 	//semaphore for synchronization purposes

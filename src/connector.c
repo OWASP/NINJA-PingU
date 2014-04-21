@@ -75,79 +75,71 @@ int *start_connector(void *agentI) {
 		count = epoll_wait((int )epfd, events, MAX_SOCKS, -1);
 		for (i = 0; i < count; i++) {
 
-			if ((events[i].events & EPOLLERR) || (events[i].events & EPOLLRDHUP) || (events[i].events & EPOLLHUP)) //socket is erroneous
+			if (events[i].events & EPOLLERR) //socket is erroneous
 			{
 				deleteSock(epfd, events[i].data.fd);
 			}
 
 			if (events[i].events & EPOLLOUT) //we can write
 			{
-				if (socket_check(events[i].data.fd) != 0) {
-					deleteSock(epfd, events[i].data.fd);
-					continue;
-				} else {
-					// Request
-					int porr = (int)getPortBySock(events[i].data.fd);
-					char *message= malloc(sizeof(char)*80);
+				// Request
+				int porr = (int)getPortBySock(events[i].data.fd);
+				char *message= malloc(sizeof(char)*80);
 
-					getServiceInput(porr, message);
-					int messagelength = strlen(message);
-					if ((datacount = send(events[i].data.fd, message, messagelength, 0)) < 0) {
-						//printf("send failed");
-						continue;
-					} else {
-						event_mask.events = EPOLLIN | EPOLLRDHUP | EPOLLERR;
-						event_mask.data.fd = events[i].data.fd;
-						if (epoll_ctl((int) epfd, EPOLL_CTL_MOD, events[i].data.fd, &event_mask) != 0) {
-							deleteSock(epfd, events[i].data.fd);
-							continue;
-						}
-					}
-					if (message != NULL) {
-						free(message);
-					}
-				}
-			}
-			if ((events[i].events & EPOLLIN)) //we can read
-			{
-				if (socket_check(events[i].data.fd) != 0) {
-					deleteSock(epfd, events[i].data.fd);
+				getServiceInput(porr, message);
+				int messagelength = strlen(message);
+				if ((datacount = send(events[i].data.fd, message, messagelength, 0)) < 0) {
+					//printf("send failed");
 					continue;
 				} else {
-					struct host hostInfo;
-					hostInfo.port =  (int)getPortBySock(events[i].data.fd);
-					hostInfo.ip =  getHostBySock(events[i].data.fd);
-					if (hostInfo.port == -1 || strlen(hostInfo.ip) == 0){
+					event_mask.events = EPOLLIN | EPOLLRDHUP | EPOLLERR;
+					event_mask.data.fd = events[i].data.fd;
+					if (epoll_ctl((int) epfd, EPOLL_CTL_MOD, events[i].data.fd, &event_mask) != 0) {
 						deleteSock(epfd, events[i].data.fd);
 						continue;
 					}
-					memset(buffer, 0x0, buffersize);
-					char *msg;
-					msg = (char *) malloc(5000);
-					if (msg != NULL) {
-						int data = 0, datacount = 0;
-						while ((datacount = recv(events[i].data.fd, buffer, buffersize, 0)) > 0) {
-							buffer[datacount] = '\0';
-							if (data + datacount > 4999) {
-								break;
-							}
-							if (data == 0) {
-								strncpy(msg, buffer,4999);
-							} else {
-								strncat(msg, buffer,4999);
-							}
-							data = data + datacount;
-						}
-						if (data > 0) {
-							provideOutput(hostInfo.ip, hostInfo.port, msg);
-							persistAck(hostInfo.ip,hostInfo.port,msg);
-						}
-						if (msg!= NULL) {
-							free(msg);
-						}
-					}
-					deleteSock(epfd, events[i].data.fd);
 				}
+				if (message != NULL) {
+					free(message);
+				}
+				
+			}
+			if ((events[i].events & EPOLLIN)) //we can read
+			{
+				struct host hostInfo;
+				hostInfo.port =  (int)getPortBySock(events[i].data.fd);
+				hostInfo.ip =  getHostBySock(events[i].data.fd);
+				if (hostInfo.port == -1 || strlen(hostInfo.ip) == 0){
+					deleteSock(epfd, events[i].data.fd);
+					continue;
+				}
+				memset(buffer, 0x0, buffersize);
+				char *msg;
+				msg = (char *) malloc(5000);
+				if (msg != NULL) {
+					int data = 0, datacount = 0;
+					while ((datacount = recv(events[i].data.fd, buffer, buffersize, 0)) > 0) {
+						buffer[datacount] = '\0';
+						if (data + datacount > 4999) {
+							break;
+						}
+						if (data == 0) {
+							strncpy(msg, buffer,4999);
+						} else {
+							strncat(msg, buffer,4999);
+						}
+						data = data + datacount;
+					}
+					if (data > 0) {
+						provideOutput(hostInfo.ip, hostInfo.port, msg);
+						persistAck(hostInfo.ip,hostInfo.port,msg);
+					}
+					if (msg!= NULL) {
+						free(msg);
+					}
+				}
+				deleteSock(epfd, events[i].data.fd);
+			
 			}
 			if (events[i].events & EPOLLERR) { //error
 				continue;

@@ -264,7 +264,7 @@ void *start_sender(void *agentI) {
 	const int *val = &one;
 	if (setsockopt(s, IPPROTO_IP, IP_HDRINCL, val, sizeof(one)) < 0) {
 		printf("\nERROR!!!!!\n\n Error: Need super cow powers to run, sorry :/\n");
-		printf("Error setting IP_HDRINCL. Error number : %d . Error message : %s \n", errno, strerror(errno));
+		//printf("Error setting IP_HDRINCL. Error number : %d . Error message : %s \n", errno, strerror(errno));
 		exit(0);
 	}
 	//TODO: this should be changed to a normal uid

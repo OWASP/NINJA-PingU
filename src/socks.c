@@ -120,17 +120,12 @@ int create_and_connect(char *ip, int port, int socksEventDescriptor) {
 	//additional options here, port reuse
 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
 	setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, &yes, sizeof(yes));
-	//setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &yes, sizeof(yes));
-	//setsockopt(sock, IPPROTO_TCP, TCP_SYNCNT, &yes, sizeof(yes));
-	//setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &yes, sizeof(yes));
-	//setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &yes, sizeof(yes));
-	//setsockopt(sock, SOL_SOCKET, SO_NOSIGPIPE, &yes, sizeof(yes));
 
 	if (connect(sock, (struct sockaddr *) &target, sizeof(struct sockaddr)) == -1 && errno != EINPROGRESS && errno == EAGAIN) {
 		create_and_connect(ip, port, socksEventDescriptor);
 		return -1;
 	} else {
-		Edgvent.events = EPOLLOUT | EPOLLIN | EPOLLRDHUP | EPOLLHUP | EPOLLERR | EPOLLPRI;
+		Edgvent.events = EPOLLOUT | EPOLLIN | EPOLLERR;
 		Edgvent.data.fd = sock;
 		// add the socket to the epoll file descriptors
 		if (epoll_ctl((int) socksEventDescriptor, EPOLL_CTL_ADD, sock, &Edgvent) != 0) {
