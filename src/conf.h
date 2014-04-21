@@ -55,7 +55,7 @@
 #define UNKNOWN "UNKNOWN"
 
 //cache size to hold temporary data withing the thread (the bigger the less sync)
-#define CACHE_SYNC  1
+#define CACHE_SYNC  10
 
 //my boolean algebra
 #define TRUE 1

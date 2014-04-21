@@ -38,8 +38,8 @@ void make_plot(char *firstIp, unsigned int* ports[2])
 
 	//get the last ip address scanned
 	char *lastIp;
-	lastIp = (char *) malloc(19 * sizeof(char));
-	snprintf(lastIp, 199, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
+	lastIp = (char *) malloc(19);
+	snprintf(lastIp, 19, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
 
 	int bufSize = 1000;
 	char * newBuffer = (char *)malloc(bufSize);
