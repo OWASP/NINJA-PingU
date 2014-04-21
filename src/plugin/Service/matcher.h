@@ -19,7 +19,7 @@
 #define httpServSize 2
 #define httpInfoSize 16
 
-#define camServSize 40
+#define camServSize 29
 #define printServSize 8
 
 #define telnetServSize 2
@@ -36,49 +36,41 @@
 
 #define osSize 7
 
+char tokens[8] = {' ', '/', '-', '_', '(', ')', ':','*'};
+
+
 regex_t cam_serv_matcher[camServSize];
-const char *cam_serv_str[][2] = {   {"MOBOTIX", "IPCamera (MOBOTIX)"},
-									{"Server: asic.NET", "ASIC Controller. Default admin:admin"},
-									{"Server: gunicorn", "Camera. Default no pswd"},
-									{"Server: TAC/Xenta", "router. Default root:root"},
-									{"Server: NetEVI", "Camera. Default no pswd"},
-									{"Server: EWS-NIC", "Priner"},
-									{"Server: MWS/", "Camera. Default no pswd"},
-									{"Server: NVR4CH", "Camera. Default admin:admin"},
-									{"Server: go1984", "Camera. Default no pswd"},
-									{"Server: Enigma2", "Smart TV. Default no pswd"},
-									{"Server: IQinVision", "Camera"},
-									{"Server: IPOffice", "Priner"},
-									{"<title>Spectra", "IPCamera (Spectra)"},
-									{"Server: Siemens Switzerland", "Central Communication Unit (Siemens)"},
-									{"Network Camera", "IPCamera (AXIS CAM)"},	
-									{"Control Center Launcher", "IPCamera (AXIS CAM)"},	
-									{"EvoCam", "IPCamera (EvoCam)"},
-									{"IP Camera", "IPCamera (IP Camera)"},
-									{"Camera Web Server", "IPCamera (Camera Web Server)"},
-									{"IPCam", "IPCamera (IP CAM)"},
-									{"DhWebCookie", "IPCamera (IP Camera)"},
-									{"VIDEO WEB SERVER", "VIDEO WEB SERVER)"},
-									{"Camera Image", "IPCamera (Camera Image)"},
-									{"Virata-EmWeb", "IPCamera (WebCam)"},
-									{"WebCam", "IPCamera (WebCam)"},
-									{"Blue Iris", "IPCamera (Blue Iris)"},
-									{"BlueIris", "IPCamera (Blue Iris)"},
-									{"Server: webcam", "IPCamera (WebCam Server)"},
-									{"Server: GeoHttpServer", "IPCamera (GeoHttpServer)"},
-									{"Techno Vision Security System", "IPCamera (Techno Vision Security System)"},
-									{"Server: AquaController", "AquaController Device"},
-									{"Server: TRMB", "GPS Station (TRMB)"},
-									{"Server: LightTPD", "IPCamera (LightTPD)"},
-									{"Server: Grandstream", "IPCamera (Grandstream)"},
-									{"Server: ADH", "IPCamera (ADH-Web)"},
-									{"Server: Mbedthis", "IPCamera (Mbedthis-AppWeb)"},
-									{"Server: Muratec", "Manager Device"},
-									{"Server: JAWS", "IPCamera (JAWS)"},
-									{"Server: Indigo", "IPCamera (Indigo)"},
-									{"Server: H264DVR", "IPCamera (H264DVR)"},
-									{"Server: HyNetOS", "IPCamera (HyNetOS)"},
-									{"axiscam", "IPCamera (axiscam)"}
+const char *cam_serv_str[][2] = { {"MOBOTIX", "IPCamera (MOBOTIX)"},
+								  {"<title>Spectra", "IPCamera (Spectra)"},
+								  {"Server: Siemens Switzerland", "Central Communication Unit (Siemens)"},
+								  {"Network Camera", "IPCamera (AXIS CAM)"},	
+								  {"Control Center Launcher", "IPCamera (AXIS CAM)"},	
+								  {"EvoCam", "IPCamera (EvoCam)"},
+								  {"IP Camera", "IPCamera (IP Camera)"},
+								  {"Camera Web Server", "IPCamera (Camera Web Server)"},
+								  {"IPCam", "IPCamera (IP CAM)"},
+								  {"DhWebCookie", "IPCamera (IP Camera)"},
+								  {"VIDEO WEB SERVER", "VIDEO WEB SERVER)"},
+								  {"Camera Image", "IPCamera (Camera Image)"},
+								  {"Virata-EmWeb", "IPCamera (WebCam)"},
+								  {"WebCam", "IPCamera (WebCam)"},
+								  {"Blue Iris", "IPCamera (Blue Iris)"},
+								  {"BlueIris", "IPCamera (Blue Iris)"},
+								  {"Server: webcam", "IPCamera (WebCam Server)"},
+								  {"Server: GeoHttpServer", "IPCamera (GeoHttpServer)"},
+								  {"Techno Vision Security System", "IPCamera (Techno Vision Security System)"},
+								  {"Server: AquaController", "AquaController Device"},
+								  {"Server: TRMB", "GPS Station (TRMB)"},
+								  {"Server: LightTPD", "IPCamera (LightTPD)"},
+								  {"Server: Grandstream", "IPCamera (Grandstream)"},
+								  {"Server: ADH", "IPCamera (ADH-Web)"},
+								  {"Server: Mbedthis", "IPCamera (Mbedthis-AppWeb)"},
+								  {"Server: Muratec", "Manager Device"},
+								  {"Server: JAWS", "IPCamera (JAWS)"},
+								  {"Server: Indigo", "IPCamera (Indigo)"},
+								  {"Server: H264DVR", "IPCamera (H264DVR)"},
+								  {"Server: HyNetOS", "IPCamera (HyNetOS)"},
+								  {"axiscam", "IPCamera (axiscam)"}
 							};
 
 regex_t print_serv_matcher[printServSize];
@@ -100,7 +92,7 @@ const char *http_serv_str[][2] = { {"html", "http"},
 							};
 
 const char *http_info_str[][2] = {
-							{"Server: ([^ ]*)", "()"},
+							{"Server:\\s{0,1}([a-zA-Z0-9./_-]*)", "()"},
 							{"Basic realm=\"([^\"]*)", "()"},
 							{"Mbedthis-AppWeb", "(Mbedthis-AppWeb)"},
 							{"ZyXEL-RomPager", "(ZyXEL-RomPager)"},
