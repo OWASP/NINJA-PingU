@@ -61,7 +61,7 @@ void parseIpAddresses(char *in)
 			maxIp[i] = seed_ip[i];
 	  }
 	  maxOct=malloc(sizeof(char)*30);
-	  snprintf(maxOct, 199, "%d.%d.%d.%d", maxIp[0], maxIp[1], maxIp[2], maxIp[3]);
+	  snprintf(maxOct, 19, "%d.%d.%d.%d", maxIp[0], maxIp[1], maxIp[2], maxIp[3]);
 }
 
 void parsePorts(unsigned int* ports[2], char *in)
@@ -194,8 +194,11 @@ char *getMeALocalAddr()
 		return wlan;
 	} else {
 		printf("I found several potential local interfaces to use, please write the local ip to use:\n");
-		scanf("%s", lan);
-		return lan;
+		if (scanf("%s", lan) == 1 )  {
+			return lan;
+		} else {
+			exit(1);
+		}
 	}
 }
 
@@ -334,7 +337,7 @@ int main(int args, char **argv) {
 	pthread_create(&statsprinter, NULL, *printstats, (void *) &s);
         char *firstIp;
 	firstIp = (char *) malloc(19 * sizeof(char));
-	snprintf(firstIp, 199, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
+	snprintf(firstIp, 19, "%d.%d.%d.%d", seed_ip[0], seed_ip[1], seed_ip[2], seed_ip[3]);
 
 	//wait for threads creation
 	for (i = 0; i < sendT+6; i++)

@@ -63,8 +63,12 @@ void provideOutput(char *host, int port, char *msg) {
 	} else if (port == 80 || port == 8080) {
 		serv=matchBanner(msg);
 		if (serv != NULL) {
-		//TODOchar **serv_t = tokenize(serv);
-		persistServ(host, port, serv);
+			//TODOchar **serv_t = tokenize(serv);
+			persistServ(host, port, serv);
+serv = matchSpecial(msg);
+                if (strcmp(serv, UNKNOWN) != 0) {
+                        persistSpecialServ(host, port, serv);
+                } 
 		} else {
 			persistServ(host, port, "UNKNOWN");
 		}
