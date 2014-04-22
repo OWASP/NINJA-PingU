@@ -214,6 +214,7 @@ char **tokenize(char *in) {
 		//printf("[%s] ", out[i]);
 	}
 	//printf("\n");
+	return out;
 }
 
 char *matchBanner(char *in) {

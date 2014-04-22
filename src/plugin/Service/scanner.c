@@ -57,8 +57,8 @@ void getServiceInput(int port, char *msg) {
 }
 
 void provideOutput(char *host, int port, char *msg) {
-	char *serv;
-	char *spec;
+	char *serv = NULL;
+	char *spec = NULL;
 	if (synOnly == TRUE) {
 		return;
 	} else if (port == 80 || port == 8080) {

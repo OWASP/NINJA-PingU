@@ -1,4 +1,4 @@
-PLUGINS=Simple Service Backdoor32764 VulnScanner
+PLUGINS=Simple Service Backdoor32764
 PSOURCE=scanner.c
 POBJECT=$(PSOURCE:.c=.o)
 PLIB=$(PSOURCE:.c=.so)

@@ -19,7 +19,7 @@
 #include <stdio.h>
 
 //TODO: this has to be refactored
-#define plot_visualizer_cmd "su $SUDO_USER -c \"sensible-browser out/scan.png &>/dev/null\""
+#define plot_visualizer_cmd "su $SUDO_USER -c \"sensible-browser ./out/scan.png &>/dev/null\""
 
 
 int run_cmd(const char *cmd)
