@@ -58,31 +58,26 @@ void getServiceInput(int port, char *msg) {
 
 void provideOutput(char *host, int port, char *msg) {
 	char *serv;
+	char *spec;
 	if (synOnly == TRUE) {
 		return;
 	} else if (port == 80 || port == 8080) {
-		serv=matchBanner(msg);
+		serv = matchBanner(msg);
 		if (serv != NULL) {
 			//TODOchar **serv_t = tokenize(serv);
 			persistServ(host, port, serv);
-serv = matchSpecial(msg);
-                if (strcmp(serv, UNKNOWN) != 0) {
-                        persistSpecialServ(host, port, serv);
-                } 
 		} else {
 			persistServ(host, port, "UNKNOWN");
 		}
-
-	} else {
-		serv = matchSpecial(msg);
-		if (strcmp(serv, UNKNOWN) != 0) {
-			persistSpecialServ(host, port, serv);
-		} else {
-			serv = match(msg);
-			persistServ(host, port, serv);
-		}
+		spec= matchSpecial(msg);
+		if (strcmp(spec, UNKNOWN) != 0) {
+                      persistSpecialServ(host, port, spec);
+                }
 	}
 	if (serv != NULL) {
 		free(serv);
+	}
+	if (spec != NULL) {
+		free(spec);
 	}
 }
